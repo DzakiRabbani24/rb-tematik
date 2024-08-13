@@ -40,23 +40,27 @@ Route::middleware('auth')->group(function () {
         }
     })->name('dashboard');
 
-    // Rute khusus admin
+    // Rute Admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
-        // Tambah akun oleh admin
-        Route::get('/admin/add-user', [AdminController::class, 'showAddUserForm'])->name('admin.addUserForm');
+        Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
+        Route::get('/admin/add-user', [AdminController::class, 'showUserTable'])->name('admin.showUserTable');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
-
-        // View Crosscutting dan Progress RB Tematik
-        Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
-        Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
-        Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress']);
-        Route::get('/available-years', [AdminController::class, 'getAvailableYears']);
     });
     
+    // web.php
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+
+        Route::get('/admin/add-user', [AdminController::class, 'showUserTable'])->name('admin.showUserTable');
+        Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
+    });
+
     // Rute khusus koordinator
     Route::middleware('role:koordinator')->group(function () {
         Route::get('/koordinator/dashboard', function () {
