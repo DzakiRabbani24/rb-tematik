@@ -40,15 +40,20 @@ Route::middleware('auth')->group(function () {
         }
     })->name('dashboard');
 
-    // Rute khusus admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
-        // Rute untuk menampilkan form dan tabel user
+        // Tambah akun oleh admin
         Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
+
+        // View Crosscutting dan Progress RB Tematik
+        Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
+        Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
+        Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress'])->name('admin.rbtematik.progress');
+        Route::get('/available-years', [AdminController::class, 'getAvailableYears'])->name('admin.available.years');
     });
 
     // Rute khusus koordinator
