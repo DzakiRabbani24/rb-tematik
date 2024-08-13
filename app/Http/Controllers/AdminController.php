@@ -12,25 +12,16 @@ use App\Models\KertasKerjaRenaksi;
 
 class AdminController extends Controller
 {
-    /**
-     * Menampilkan form tambah user dan tabel user.
-     *
-     * @return \Illuminate\View\View
-     */
     public function addUserForm()
     {
-        $perangkatDaerah = PerangkatDaerah::all(); // Ambil semua perangkat daerah
-        $users = User::with('perangkatDaerah')->get(); // Ambil semua user dan perangkat daerah terkait
+        $perangkatDaerah = PerangkatDaerah::all();
+        $users = User::whereIn('role', ['koordinator', 'pelaksana'])
+                     ->with('perangkatDaerah')
+                     ->get();
 
         return view('admin.add-user', compact('perangkatDaerah', 'users'));
     }
 
-    /**
-     * Menyimpan data user baru.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         // Validasi dan simpan data user
@@ -59,8 +50,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
-
-
 
     // Metode untuk view Crosscutting
     public function viewCrosscutting()
