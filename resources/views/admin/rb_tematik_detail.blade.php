@@ -11,6 +11,7 @@
                     <i class="fas fa-chart-line"></i> Detail Progress RB Tematik
                 </div>
                 <div class="card-body">
+                    @include('components.ImportExportButtons')
                     <h5 class="card-title">RB Tematik Details</h5>
                     <p class="card-text mb-4">Here you can find the detailed progress of RB Tematik.</p>
 
