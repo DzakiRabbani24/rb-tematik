@@ -2,27 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use App\Models\PerangkatDaerah;
-use Illuminate\Support\Facades\DB;
 use App\Models\KertasKerjaRenaksi;
+
 
 class AdminController extends Controller
 {
+    /**
+     * Menampilkan form tambah user dan tabel user.
+     *
+     * @return \Illuminate\View\View
+     */
     public function addUserForm()
     {
-        return view('admin.add-user');
+        $perangkatDaerah = PerangkatDaerah::all(); // Ambil semua perangkat daerah
+        $users = User::with('perangkatDaerah')->get(); // Ambil semua user dan perangkat daerah terkait
+
+        return view('admin.add-user', compact('perangkatDaerah', 'users'));
     }
 
+    /**
+     * Menyimpan data user baru.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        Log::info('Data yang diterima:', ['data' => $request->all()]);
-        Log::info('Route URL:', ['url' => route('admin.store')]);
-        
-        // Validasi input
+        // Validasi dan simpan data user
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'password' => [
@@ -38,39 +49,28 @@ class AdminController extends Controller
             'password.min' => 'Password harus memiliki panjang minimal :min karakter.',
             'password.regex' => 'Password harus mengandung huruf, angka, dan simbol.',
         ]);
-        
-        Log::info('Data yang valid:', ['validatedData' => $validatedData]);
 
-        // Simpan data ke database
         $user = new User();
         $user->username = $validatedData['username'];
-        $user->password = Hash::make($validatedData['password']); // Enkripsi password
+        $user->password = Hash::make($validatedData['password']);
         $user->role = $validatedData['role'];
-        $user->perangkat_daerah_id = $validatedData['perangkat_daerah_id']; // Simpan perangkat daerah ID
+        $user->perangkat_daerah_id = $validatedData['perangkat_daerah_id'];
         $user->save();
 
-        // Redirect dengan pesan sukses
         return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
 
-    public function showAddUserForm()
-    {
-        return view('admin.add-user', compact('perangkatDaerah'));
-    }
+
 
     // Metode untuk view Crosscutting
     public function viewCrosscutting()
     {
-        // Logika untuk menampilkan data crosscutting
         return view('admin.crosscutting');
     }
 
-    // Metode untuk view RB Tematik
     public function viewRBTematik()
     {
-        // Logika untuk menampilkan progress RB Tematik
-        $rbTematikData = DB::table('kertas_kerja_renaksi')->get(); // Contoh query, sesuaikan dengan kebutuhan
-
+        $rbTematikData = DB::table('kertas_kerja_renaksi')->get();
         return view('admin.rb_tematik_detail', compact('rbTematikData'));
     }
 
@@ -79,12 +79,10 @@ class AdminController extends Controller
         $year = $request->input('year');
         $quarter = $request->input('quarter');
 
-        // Ambil data berdasarkan tahun dan triwulan
         $data = KertasKerjaRenaksi::whereYear('created_at', $year)
             ->where('quarter', $quarter)
             ->get();
 
-        // Hitung capaian dan realisasi anggaran
         $progress = $this->calculateProgress($data);
         $budget = $this->calculateBudget($data);
 
@@ -102,8 +100,8 @@ class AdminController extends Controller
         foreach ($data as $item) {
             $target = $item->target;
             $realisasi = $item->realisasi;
-            $indikatorMinimum = $item->indikator_minimum; // 'Ya' atau 'Tidak'
-            $konsolidasi = $item->konsolidasi; // 'Penjumlahan', 'Rata-Rata', atau 'Hasil Akhir'
+            $indikatorMinimum = $item->indikator_minimum;
+            $konsolidasi = $item->konsolidasi;
 
             if ($konsolidasi == 'Penjumlahan') {
                 $totalTarget += $target;
@@ -112,8 +110,8 @@ class AdminController extends Controller
                 $totalTarget += $target;
                 $totalRealisasi += $realisasi / count($data);
             } elseif ($konsolidasi == 'Hasil Akhir') {
-                $totalTarget = $target; // Ambil target dari item terakhir
-                $totalRealisasi = $realisasi; // Ambil realisasi dari item terakhir
+                $totalTarget = $target;
+                $totalRealisasi = $realisasi;
             }
         }
 
@@ -144,7 +142,6 @@ class AdminController extends Controller
         return $budgetPercentage;
     }
 
-    // Method to fetch available years
     public function getAvailableYears()
     {
         $years = KertasKerjaRenaksi::selectRaw('YEAR(created_at) as year')

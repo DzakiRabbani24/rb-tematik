@@ -65,7 +65,36 @@
         </div>
     </div>
 </div>
+
+<div class="card mt-4">
+    <div class="card-header bg-secondary text-white text-center">
+        <h5 class="my-1">Daftar Akun</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Perangkat Daerah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <td>{{ $user->username }}</td>
+                        <td>{{ ucfirst($user->role) }}</td>
+                        <td>{{ $user->perangkatDaerah->nama ?? 'Tidak ada' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
+
+
+
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

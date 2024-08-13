@@ -40,14 +40,13 @@ Route::middleware('auth')->group(function () {
         }
     })->name('dashboard');
 
-    // Rute khusus admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
         // Tambah akun oleh admin
-        Route::get('/admin/add-user', [AdminController::class, 'showAddUserForm'])->name('admin.addUserForm');
+        Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
 
         // View Crosscutting dan Progress RB Tematik
@@ -56,7 +55,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress'])->name('admin.rbtematik.progress');
         Route::get('/available-years', [AdminController::class, 'getAvailableYears'])->name('admin.available.years');
     });
-    
+
     // Rute khusus koordinator
     Route::middleware('role:koordinator')->group(function () {
         Route::get('/koordinator/dashboard', function () {
