@@ -95,7 +95,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Crosscutting Data</h5>
                             <p class="card-text">Display relevant crosscutting data here.</p>
-                            <a href="#" class="btn btn-light">View Details</a>
+                            <a href="{{ route('admin.crosscutting') }}" class="btn btn-light">View Details</a>
                         </div>
                     </div>
 
@@ -105,7 +105,7 @@
                         <div class="card-body">
                             <h5 class="card-title">RB Tematik Progress</h5>
                             <p class="card-text">Overview of RB Tematik progress.</p>
-                            <a href="#" class="btn btn-light">View Details</a>
+                            <a href="{{ route('admin.rbtematik') }}" class="btn btn-light">View Details</a>
                         </div>
                     </div>
 
