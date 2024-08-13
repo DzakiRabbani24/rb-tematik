@@ -4,25 +4,31 @@
 
 @section('content')
 <div class="container animated-bg">
+    <div class="text-center mb-4">
+        <h2 class="display-6 text-white">Tambah Akun Koordinator / Pelaksana</h2>
+    </div>
+
     <div class="card mx-auto shadow" style="max-width: 600px;">
         <div class="card-header bg-primary text-white text-center">
             <h5 class="my-1">Form Tambah Akun</h5>
         </div>
         <div class="card-body">
+            <!-- Form untuk Koordinator/Pelaksana -->
             <div id="regularForm">
                 <form id="addUserForm" action="{{ route('admin.store') }}" method="POST">
                     @csrf
-
-                    {{-- Textbox Usn --}}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ old('username') }}" required>
-                        <label for="username">Username</label>
-                        @error('username')
+                        <select class="form-select" id="role" name="role" onchange="checkRole()">
+                            <option value="koordinator">Koordinator</option>
+                            <option value="pelaksana">Pelaksana</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <label for="role">Role</label>
+                        @error('role')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div>                    
 
-                    {{-- Textbox Pass --}}
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                         <label for="password">Password</label>
@@ -36,10 +42,8 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    {{-- Dropdown Role --}}
                     <div class="form-floating mb-3">
-                        <select class="form-select" id="role" name="role" onchange="checkRole()">
+                        <select id="role" name="role" onchange="checkRole()">
                             <option value="koordinator">Koordinator</option>
                             <option value="pelaksana">Pelaksana</option>
                             <option value="admin">Admin</option>
@@ -49,8 +53,6 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    {{-- Dropdown Pilih Perangkat Daerah --}}
                     <div id="perangkatDaerahSection">
                         <div class="form-floating mb-3">
                             <select class="form-select" id="perangkat_daerah_id" name="perangkat_daerah_id" required>
@@ -70,32 +72,18 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Model Tambah Admin -->
-<div id="adminPopup" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Akun Admin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addAdminForm" action="{{ route('admin.user.storeAdmin') }}" method="POST">
+            <!-- Form Popup untuk Admin -->
+            <div id="adminFormPopup" style="display:none;">
+                <form action="{{ route('admin.user.store') }}" method="POST">
                     @csrf
-                
-                    {{-- Textbox Usn Admin --}}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="adminUsername" name="username" placeholder="Username" value="{{ old('username') }}" required>
-                        <label for="adminUsername">Username</label>
+                        <input type="text" class="form-control" id="admin_username" name="username" placeholder="Username" required>
+                        <label for="admin_username">Username</label>
                         @error('username')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                
-                    {{-- Textbox Password Admin --}}
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="admin_password" name="password" placeholder="Password" required>
                         <label for="admin_password">Password</label>
@@ -109,11 +97,44 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                
+                    <input type="hidden" name="role" value="admin">
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-lg">Buat Akun Admin</button>
+                        <button type="submit" class="btn btn-success btn-lg">Create Admin Account</button>
                     </div>
-                </form>                                               
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="adminPopup" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Akun Admin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAdminForm" action="{{ route('admin.user.store') }}" method="POST">
+                    @csrf
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="adminUsername" name="username" placeholder="Username" value="{{ old('username') }}" required>
+                        <label for="adminUsername">Username</label>
+                        @error('username')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-floating mb-3 position-relative">
+                        <input type="password" class="form-control" id="adminPassword" name="password" placeholder="Password" required>
+                        <label for="adminPassword">Password</label>
+                        @error('password')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">Create Admin Account</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -179,7 +200,7 @@
                 confirmButtonText: 'Ok'
             });
         @endif
-
+        
         // Toggle password visibility
         const passwordEye = document.querySelector('#passwordEye');
         const adminPasswordEye = document.querySelector('#admin_passwordEye');
@@ -202,3 +223,11 @@
     });
 </script>
 @endsection
+
+<style>
+    .position-absolute {
+        top: 50%;
+        right: 1rem; /* Jarak dari tepi kanan */
+        transform: translateY(-50%);
+    }
+</style>
