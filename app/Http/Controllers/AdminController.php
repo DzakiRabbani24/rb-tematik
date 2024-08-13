@@ -51,6 +51,32 @@ class AdminController extends Controller
         return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
 
+    public function storeAdmin(Request $request)
+    {
+        // Validasi dan simpan data admin
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:255|unique:users',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#.,]).+$/'
+            ],
+        ], [
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password harus memiliki panjang minimal :min karakter.',
+            'password.regex' => 'Password harus mengandung huruf, angka, dan simbol.',
+        ]);
+
+        $user = new User();
+        $user->username = $validatedData['username'];
+        $user->password = Hash::make($validatedData['password']);
+        $user->role = 'admin';
+        $user->save();
+
+        return redirect()->route('admin.addUserForm')->with('success', 'Admin berhasil dibuat!');
+    }
+
     // Metode untuk view Crosscutting
     public function viewCrosscutting()
     {
