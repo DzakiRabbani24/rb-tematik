@@ -53,8 +53,8 @@ Route::middleware('auth')->group(function () {
         // View Crosscutting dan Progress RB Tematik
         Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
         Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
-        Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress']);
-        Route::get('/available-years', [AdminController::class, 'getAvailableYears']);
+        Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress'])->name('admin.rbtematik.progress');
+        Route::get('/available-years', [AdminController::class, 'getAvailableYears'])->name('admin.available.years');
     });
     
     // Rute khusus koordinator
@@ -80,9 +80,14 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Untuk input perangkat daerah
-Route::get('/perangkat-daerah', [FormController::class, 'perangkatDaerahForm'])->name('admin.perangkat.daerah.form');
-Route::post('/perangkat-daerah-submit', [FormController::class, 'submitPerangkatDaerah'])->name('perangkat.daerah.submit');
+// Rute untuk input perangkat daerah
+Route::middleware('role:admin')->group(function () {
+    Route::get('/perangkat-daerah', [FormController::class, 'perangkatDaerahForm'])->name('admin.perangkat.daerah.form');
+    Route::post('/perangkat-daerah', [FormController::class, 'submitPerangkatDaerah'])->name('perangkat.daerah.submit');
+    Route::get('/perangkat-daerah/edit/{id}', [FormController::class, 'editPerangkatDaerah'])->name('perangkat.daerah.edit');
+    Route::post('/perangkat-daerah/update', [FormController::class, 'updatePerangkatDaerah'])->name('perangkat.daerah.update');
+    Route::delete('/perangkat-daerah/delete/{id}', [FormController::class, 'deletePerangkatDaerah'])->name('perangkat.daerah.delete');
+});
 
 // Import Export Excel
 Route::post('/import-kertas-kerja-renaksi', [KertasKerjaRenaksiController::class, 'import'])->name('kertasKerjaRenaksi.import');

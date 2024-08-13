@@ -55,7 +55,6 @@ class AdminController extends Controller
 
     public function showAddUserForm()
     {
-        $perangkatDaerah = PerangkatDaerah::all(); // Ambil semua perangkat daerah dari database
         return view('admin.add-user', compact('perangkatDaerah'));
     }
 

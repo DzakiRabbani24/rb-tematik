@@ -8,21 +8,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
+    @section('title', 'Edit Perangkat Daerah')
+
     <div id="app">
-        @include('layouts.navbar')
 
         <div class="container mt-4">
-            @yield('content')
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('perangkat.daerah.update', $daerah->id) }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nama" class="form-label">Nama Perangkat Daerah</label>
+                                <input type="text" class="form-control" id="nama" name="nama" value="{{ $daerah->nama }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <a href="{{ route('admin.perangkat.daerah.form') }}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts') <!-- Tempat untuk script tambahan -->
 </body>
