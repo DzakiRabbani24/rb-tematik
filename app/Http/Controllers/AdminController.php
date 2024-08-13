@@ -60,6 +60,9 @@ class AdminController extends Controller
         return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
 
+
+
+    // Metode untuk view Crosscutting
     public function viewCrosscutting()
     {
         return view('admin.crosscutting');
