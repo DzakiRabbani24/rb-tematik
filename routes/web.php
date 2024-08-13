@@ -40,24 +40,14 @@ Route::middleware('auth')->group(function () {
         }
     })->name('dashboard');
 
-    // Rute Admin
+    // Rute khusus admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
+        // Rute untuk menampilkan form dan tabel user
         Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
-        Route::get('/admin/add-user', [AdminController::class, 'showUserTable'])->name('admin.showUserTable');
-        Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
-    });
-    
-    // web.php
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
-
-        Route::get('/admin/add-user', [AdminController::class, 'showUserTable'])->name('admin.showUserTable');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
     });
 

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -12,26 +10,28 @@ use App\Models\KertasKerjaRenaksi;
 
 class AdminController extends Controller
 {
-
-    public function showUserTable()
+    /**
+     * Menampilkan form tambah user dan tabel user.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function addUserForm()
     {
-        $perangkatDaerah = PerangkatDaerah::all();
-        $users = User::with('perangkatDaerah')->get();
+        $perangkatDaerah = PerangkatDaerah::all(); // Ambil semua perangkat daerah
+        $users = User::with('perangkatDaerah')->get(); // Ambil semua user dan perangkat daerah terkait
 
         return view('admin.add-user', compact('perangkatDaerah', 'users'));
     }
 
-    public function addUserForm()
-    {
-        $perangkatDaerah = PerangkatDaerah::all();
-        return view('admin.add-user', compact('perangkatDaerah'));
-    }
-
+    /**
+     * Menyimpan data user baru.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        Log::info('Data yang diterima:', ['data' => $request->all()]);
-        Log::info('Route URL:', ['url' => route('admin.store')]);
-
+        // Validasi dan simpan data user
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'password' => [
@@ -48,8 +48,6 @@ class AdminController extends Controller
             'password.regex' => 'Password harus mengandung huruf, angka, dan simbol.',
         ]);
 
-        Log::info('Data yang valid:', ['validatedData' => $validatedData]);
-
         $user = new User();
         $user->username = $validatedData['username'];
         $user->password = Hash::make($validatedData['password']);
@@ -57,7 +55,7 @@ class AdminController extends Controller
         $user->perangkat_daerah_id = $validatedData['perangkat_daerah_id'];
         $user->save();
 
-        return redirect()->route('admin.showUserTable')->with('success', 'Akun berhasil ditambahkan!');
+        return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
 
     public function viewCrosscutting()
