@@ -46,4 +46,11 @@ class LoginController extends Controller
             'username' => 'Invalid credentials.',
         ]);
     }
+
+    // Metode logout
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('login');
+    }
 }
