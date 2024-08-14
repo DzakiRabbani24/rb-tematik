@@ -10,7 +10,7 @@
                     <a class="nav-link" href="{{ route('dashboard') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
+                    <a class="nav-link" href="{{ route('profile') }}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Settings</a>
