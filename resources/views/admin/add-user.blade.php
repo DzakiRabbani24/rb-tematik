@@ -119,9 +119,11 @@
     </div>
 
     {{-- SearchBox --}}
-    <div class="mb-3 d-flex">
-        <input type="text" id="searchInput" class="form-control rounded-start" placeholder="Cari Akun" style="box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);">
-        <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
+    <div class="mb-3 mt-3 d-flex justify-content-center"> <!-- Tambahkan justify-content-center untuk merapikan posisi ke tengah -->
+        <div class="input-group" style="width: 90%;"> <!-- Gunakan inline style untuk mengatur lebar -->
+            <input type="text" id="searchInput" class="form-control rounded-start" placeholder="Cari Akun" style="box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);">
+            <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
+        </div>
     </div>
 
     <!-- Tabel User -->
@@ -148,7 +150,6 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
-                                
                             </td>
                         </tr>
                     @endforeach
@@ -157,6 +158,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('styles')
