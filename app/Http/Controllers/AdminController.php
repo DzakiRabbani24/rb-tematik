@@ -22,6 +22,17 @@ class AdminController extends Controller
         return view('admin.add-user', compact('perangkatDaerah', 'users'));
     }
 
+    public function delete($id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->delete();
+            return redirect()->back()->with('success', 'User deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'User not found');
+        }
+    }
+
     public function store(Request $request)
     {
         // Validasi dan simpan data user

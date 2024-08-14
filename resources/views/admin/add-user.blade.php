@@ -124,26 +124,37 @@
         <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
     </div>
 
-    {{-- Isi Tabel --}}
-    <div class="card-body">
-        <table id="userTable" class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Username</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Perangkat Daerah</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $user)
+    <!-- Tabel User -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ $user->username }}</td>
-                        <td>{{ ucfirst($user->role) }}</td>
-                        <td>{{ $user->perangkatDaerah->nama ?? 'Tidak ada' }}</td>
+                        <th scope="col">Username</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Perangkat Daerah</th>
+                        <th scope="col">Actions</th> <!-- Kolom Actions -->
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->username }}</td>
+                            <td>{{ ucfirst($user->role) }}</td>
+                            <td>{{ $user->perangkatDaerah->nama ?? 'Tidak ada' }}</td>
+                            <td>
+                                <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection
