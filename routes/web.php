@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/user/storeAdmin', [AdminController::class, 'storeAdmin'])->name('admin.user.storeAdmin');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
 
+        // Hapus Akun
+        Route::delete('/admin/user/{id}', [AdminController::class, 'delete'])->name('admin.user.delete');
+
         // View Crosscutting dan Progress RB Tematik
         Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
         Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
