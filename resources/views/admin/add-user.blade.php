@@ -117,8 +117,16 @@
     <div class="card-header bg-secondary text-white text-center">
         <h5 class="my-1">Daftar Akun</h5>
     </div>
+
+    {{-- SearchBox --}}
+    <div class="mb-3 d-flex">
+        <input type="text" id="searchInput" class="form-control rounded-start" placeholder="Cari Akun" style="box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);">
+        <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
+    </div>
+
+    {{-- Isi Tabel --}}
     <div class="card-body">
-        <table class="table table-striped table-hover">
+        <table id="userTable" class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">Username</th>
@@ -204,6 +212,31 @@
             adminPasswordEye.classList.toggle('bi-eye');
             adminPasswordEye.classList.toggle('bi-eye-slash');
         });
+
+        // Pencarian di tabel dengan tombol "Cari"
+        const searchInput = document.querySelector('#searchInput');
+        const searchButton = document.querySelector('#searchButton');
+        const userTable = document.querySelector('#userTable tbody');
+
+        function searchTable() {
+            const filter = searchInput.value.toLowerCase();
+            const rows = userTable.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const username = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const role = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const perangkatDaerah = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+
+                if (username.includes(filter) || role.includes(filter) || perangkatDaerah.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        // Tambahkan event listener untuk tombol "Cari"
+        searchButton.addEventListener('click', searchTable);
     });
+
 </script>
 @endsection
