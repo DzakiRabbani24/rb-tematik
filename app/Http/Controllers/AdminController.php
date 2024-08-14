@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Kepmen;
 use App\Models\User;
 use App\Models\PerangkatDaerah;
 use App\Models\KertasKerjaRenaksi;
+use App\Imports\KepmenImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class AdminController extends Controller
@@ -86,6 +89,26 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->route('admin.addUserForm')->with('success', 'Admin berhasil dibuat!');
+    }
+
+    // Menampilkan Kepmen
+    public function showKepmen()
+    {
+        $kepmen = Kepmen::all();    
+        return view('admin.kepmen', compact('kepmen'));
+    }
+
+    // Import Kepmen
+    public function importKepmen(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048', // Validasi file
+        ]);
+
+        // Impor data dari file Excel
+        Excel::import(new KepmenImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data Kepmen berhasil diimport!');
     }
 
     // Metode untuk view Crosscutting
