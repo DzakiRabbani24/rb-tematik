@@ -22,7 +22,7 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    
+
                     {{-- Textbox Password --}}
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
@@ -75,10 +75,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Pindahkan tombol "Tambah Admin" ke bawah card -->
+    <div class="mt-3 text-center">
+        <button type="button" class="btn btn-danger btn-lg" onclick="showAdminPopup()">Tambah Admin</button>
+    </div>
 </div>
 
 <!-- Popup Form Tambah Admin -->
-<div id="adminPopup" class="modal" tabindex="-1">
+<div id="adminPopup" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -167,6 +172,22 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('styles')
+<style>
+/* CSS untuk animasi popup */
+.modal.fade .modal-dialog {
+    transform: translateY(-50%);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.modal.fade.show .modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+}
+</style>
 @endsection
 
 @section('scripts')
