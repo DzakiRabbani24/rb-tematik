@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                 <div class="sub-menu-link">
-                                    <a href="#" class="text-dark text-decoration-none">KEPMEN</a>
+                                    <a href="{{ route('kepmen.index') }}" class="text-dark text-decoration-none">KEPMEN</a>
                                 </div>
                             </div>
                         </div>

@@ -61,6 +61,12 @@ Route::middleware('auth')->group(function () {
         // Hapus Akun
         Route::delete('/admin/user/{id}', [AdminController::class, 'delete'])->name('admin.user.delete');
 
+        // Menampilkan tabel kepmen
+        Route::get('/kepmen', [AdminController::class, 'showKepmen'])->name('kepmen.index');
+
+        // Import kepmen
+        Route::post('/kepmen/import', [AdminController::class, 'importKepmen'])->name('kepmen.import');
+
         // View Crosscutting dan Progress RB Tematik
         Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
         Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
