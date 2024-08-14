@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function () {
         // Tambah akun oleh admin
         Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
         Route::post('/admin/user/storeAdmin', [AdminController::class, 'storeAdmin'])->name('admin.user.storeAdmin');
-        Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.user.store');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
 
         // View Crosscutting dan Progress RB Tematik
