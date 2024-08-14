@@ -11,7 +11,5 @@
 
 1. Run composer install as usual after cloning this repository
 2. Then run php artisan migrate to migrate the database
-3. After that, run php artisan db:seed to fill in the users table, so you can log in with admin credentials
-   Usn : admin.123
-   Pass : admin.123
+3. After that, run php artisan db:seed to fill in the users table, so you can log in with admin credentials (Usn : admin.123__Pass : admin.123)
 5. Finally run php artisan key:generate as usual
