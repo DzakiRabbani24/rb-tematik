@@ -9,6 +9,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\PelaksanaController;
 use App\Http\Controllers\KertasKerjaRenaksiController;
 use App\Http\Controllers\KoordinatorController;
+use App\Http\Controllers\ProfileController;
 
 // Alias middleware secara manual (jika tidak ada kernel untuk mendaftarkannya)
 Route::aliasMiddleware('role', RoleMiddleware::class);
@@ -25,6 +26,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rute yang hanya bisa diakses oleh pengguna yang terautentikasi
 Route::middleware('auth')->group(function () {
+    
+    // Rute untuk profil pengguna
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 
     // Rute dashboard umum yang mengarahkan berdasarkan role
     Route::get('/dashboard', function () {
@@ -68,6 +72,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/rbtematik', [AdminController::class, 'viewRBTematik'])->name('admin.rbtematik');
         Route::get('/rb-tematik-progress', [AdminController::class, 'getRbTematikProgress'])->name('admin.rbtematik.progress');
         Route::get('/available-years', [AdminController::class, 'getAvailableYears'])->name('admin.available.years');
+
+        // Update Profile
+        Route::put('/admin/update-profile', [AdminController::class, 'updateProfile'])->name('admin.updateProfile');
     });
 
     // Rute khusus koordinator
@@ -80,6 +87,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/koordinator/evaluasi', [KoordinatorController::class, 'evaluasi'])->name('koordinator.evaluasi');
         Route::get('/koordinator/roadmap', [KoordinatorController::class, 'roadmap'])->name('koordinator.roadmap');
         Route::get('/koordinator/rencanaaksi', [KoordinatorController::class, 'rencanaaksi'])->name('koordinator.rencanaaksi');
+
+        // Update Profile
+        Route::put('/koordinator/update-profile', [AdminController::class, 'updateProfile'])->name('koordinator.updateProfile');
     });
 
     // Rute khusus pelaksana
@@ -90,6 +100,9 @@ Route::middleware('auth')->group(function () {
 
         // Rute khusus pelaksana lainnya
         Route::get('/rencana-aksi-rb-tematik', [PelaksanaController::class, 'rencanaAksi'])->name('pelaksana.rencanaAksi');
+
+        // Update Profile
+        Route::put('/pelaksana/update-profile', [AdminController::class, 'updateProfile'])->name('pelaksana.updateProfile');
     });
 
     // Rute untuk input perangkat daerah hanya bisa diakses oleh admin
