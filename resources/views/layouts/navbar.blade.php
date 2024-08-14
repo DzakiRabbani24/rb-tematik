@@ -5,9 +5,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="{{ route('dashboard') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Profile</a>
@@ -15,10 +15,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Settings</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Logout</a>
+                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<style>
+    .navbar-nav.ml-auto {
+        margin-left: auto;
+    }
+</style>

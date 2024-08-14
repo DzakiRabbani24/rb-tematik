@@ -13,6 +13,7 @@ use App\Http\Controllers\KoordinatorController;
 // Alias middleware secara manual (jika tidak ada kernel untuk mendaftarkannya)
 Route::aliasMiddleware('role', RoleMiddleware::class);
 
+// Rute untuk tampilan landing page
 Route::get('/', function () {
     return view('landing-page');
 });
@@ -28,18 +29,21 @@ Route::middleware('auth')->group(function () {
     // Rute dashboard umum yang mengarahkan berdasarkan role
     Route::get('/dashboard', function () {
         $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'koordinator') {
-            return redirect()->route('koordinator.dashboard');
-        } elseif ($user->role === 'pelaksana') {
-            return redirect()->route('pelaksana.dashboard');
-        } else {
-            return redirect('/');
+        
+        // Arahkan pengguna ke dashboard sesuai peran
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'koordinator':
+                return redirect()->route('koordinator.dashboard');
+            case 'pelaksana':
+                return redirect()->route('pelaksana.dashboard');
+            default:
+                return redirect('/');
         }
     })->name('dashboard');
 
+    // Rute khusus admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
@@ -63,7 +67,7 @@ Route::middleware('auth')->group(function () {
             return view('koordinator.dashboard');
         })->name('koordinator.dashboard');
         
-        // Tambahkan rute khusus koordinator lainnya di sini
+        // Rute khusus koordinator lainnya
         Route::get('/koordinator/evaluasi', [KoordinatorController::class, 'evaluasi'])->name('koordinator.evaluasi');
         Route::get('/koordinator/roadmap', [KoordinatorController::class, 'roadmap'])->name('koordinator.roadmap');
         Route::get('/koordinator/rencanaaksi', [KoordinatorController::class, 'rencanaaksi'])->name('koordinator.rencanaaksi');
@@ -75,20 +79,20 @@ Route::middleware('auth')->group(function () {
             return view('pelaksana.dashboard');
         })->name('pelaksana.dashboard');
 
-        // Tambahkan rute khusus pelaksana lainnya di sini
+        // Rute khusus pelaksana lainnya
         Route::get('/rencana-aksi-rb-tematik', [PelaksanaController::class, 'rencanaAksi'])->name('pelaksana.rencanaAksi');
+    });
+
+    // Rute untuk input perangkat daerah hanya bisa diakses oleh admin
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/perangkat-daerah', [FormController::class, 'perangkatDaerahForm'])->name('admin.perangkat.daerah.form');
+        Route::post('/perangkat-daerah', [FormController::class, 'submitPerangkatDaerah'])->name('perangkat.daerah.submit');
+        Route::get('/perangkat-daerah/edit/{id}', [FormController::class, 'editPerangkatDaerah'])->name('perangkat.daerah.edit');
+        Route::put('/perangkat-daerah/update', [FormController::class, 'updatePerangkatDaerah'])->name('perangkat.daerah.update');
+        Route::delete('/perangkat-daerah/delete/{id}', [FormController::class, 'deletePerangkatDaerah'])->name('perangkat.daerah.delete');
     });
 });
 
-// Rute untuk input perangkat daerah
-Route::middleware('role:admin')->group(function () {
-    Route::get('/perangkat-daerah', [FormController::class, 'perangkatDaerahForm'])->name('admin.perangkat.daerah.form');
-    Route::post('/perangkat-daerah', [FormController::class, 'submitPerangkatDaerah'])->name('perangkat.daerah.submit');
-    Route::get('/perangkat-daerah/edit/{id}', [FormController::class, 'editPerangkatDaerah'])->name('perangkat.daerah.edit');
-    Route::put('/perangkat-daerah/update', [FormController::class, 'updatePerangkatDaerah'])->name('perangkat.daerah.update');
-    Route::delete('/perangkat-daerah/delete/{id}', [FormController::class, 'deletePerangkatDaerah'])->name('perangkat.daerah.delete');
-});
-
-// Import Export Excel
+// Import dan Export Excel
 Route::post('/import-kertas-kerja-renaksi', [KertasKerjaRenaksiController::class, 'import'])->name('kertasKerjaRenaksi.import');
 Route::get('/export-kertas-kerja-renaksi', [KertasKerjaRenaksiController::class, 'export'])->name('kertasKerjaRenaksi.export');
