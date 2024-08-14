@@ -7,15 +7,31 @@ use Illuminate\Http\Request;
 
 class FormController extends Controller
 {
-    // Method untuk menampilkan form dan data perangkat daerah
-    public function perangkatDaerahForm()
+    public function perangkatDaerahForm(Request $request)
     {
-        // Ambil semua data perangkat daerah dari database
-        $perangkatDaerah = PerangkatDaerah::all();
+        // Ambil data pencarian jika ada
+        $search = $request->input('search');
+
+        // Ambil data perangkat daerah dari database dengan pencarian jika ada
+        $query = PerangkatDaerah::query();
+        if ($search) {
+            $query->where('nama', 'like', "%{$search}%");
+        }
+        $perangkatDaerah = $query->get();
 
         // Tampilkan view dengan data perangkat daerah
         return view('admin.perangkat_daerah_form', compact('perangkatDaerah'));
     }
+    
+    // Method untuk menampilkan form dan data perangkat daerah
+    // public function perangkatDaerahForm()
+    // {
+    //     // Ambil semua data perangkat daerah dari database
+    //     $perangkatDaerah = PerangkatDaerah::all();
+
+    //     // Tampilkan view dengan data perangkat daerah
+    //     return view('admin.perangkat_daerah_form', compact('perangkatDaerah'));
+    // }
 
     // Method untuk menangani submit form
     public function submitPerangkatDaerah(Request $request)
