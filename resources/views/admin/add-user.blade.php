@@ -9,20 +9,21 @@
             <h5 class="my-1">Form Tambah Akun</h5>
         </div>
         <div class="card-body">
+            <!-- Form untuk Koordinator/Pelaksana -->
             <div id="regularForm">
                 <form id="addUserForm" action="{{ route('admin.store') }}" method="POST">
                     @csrf
 
-                    {{-- Textbox Usn --}}
+                    {{-- Textbox Username --}}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ old('username') }}" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
                         <label for="username">Username</label>
                         @error('username')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    {{-- Textbox Pass --}}
+                    {{-- Textbox Password --}}
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                         <label for="password">Password</label>
@@ -39,10 +40,9 @@
 
                     {{-- Dropdown Role --}}
                     <div class="form-floating mb-3">
-                        <select class="form-select" id="role" name="role" onchange="checkRole()">
+                        <select class="form-select" id="role" name="role">
                             <option value="koordinator">Koordinator</option>
                             <option value="pelaksana">Pelaksana</option>
-                            <option value="admin">Admin</option>
                         </select>
                         <label for="role">Role</label>
                         @error('role')
@@ -50,7 +50,7 @@
                         @enderror
                     </div>
 
-                    {{-- Dropdown Pilih Perangkat Daerah --}}
+                    {{-- Dropdown Perangkat Daerah --}}
                     <div id="perangkatDaerahSection">
                         <div class="form-floating mb-3">
                             <select class="form-select" id="perangkat_daerah_id" name="perangkat_daerah_id" required>
@@ -72,10 +72,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Pindahkan tombol "Tambah Admin" ke bawah card -->
+    <div class="mt-3 text-center">
+        <button type="button" class="btn btn-danger btn-lg" onclick="showAdminPopup()">Tambah Admin</button>
+    </div>
 </div>
 
-<!-- Model Tambah Admin -->
-<div id="adminPopup" class="modal" tabindex="-1">
+<!-- Popup Form Tambah Admin -->
+<div id="adminPopup" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,8 +90,6 @@
             <div class="modal-body">
                 <form id="addAdminForm" action="{{ route('admin.user.storeAdmin') }}" method="POST">
                     @csrf
-                
-                    {{-- Textbox Usn Admin --}}
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="adminUsername" name="username" placeholder="Username" value="{{ old('username') }}" required>
                         <label for="adminUsername">Username</label>
@@ -94,26 +97,17 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                
-                    {{-- Textbox Password Admin --}}
                     <div class="form-floating mb-3 position-relative">
-                        <input type="password" class="form-control" id="admin_password" name="password" placeholder="Password" required>
-                        <label for="admin_password">Password</label>
-                        <div class="position-absolute top-50 end-0 translate-middle-y me-3">
-                            <input type="checkbox" id="admin_showPassword" class="form-check-input d-none">
-                            <label for="admin_showPassword" class="form-check-label">
-                                <i class="bi bi-eye" id="admin_passwordEye" style="font-size: 1.5rem; cursor: pointer;"></i>
-                            </label>
-                        </div>
+                        <input type="password" class="form-control" id="adminPassword" name="password" placeholder="Password" required>
+                        <label for="adminPassword">Password</label>
                         @error('password')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-lg">Buat Akun Admin</button>
+                        <button type="submit" class="btn btn-success btn-lg">Create Admin Account</button>
                     </div>
-                </form>                                               
+                </form>
             </div>
         </div>
     </div>
@@ -146,19 +140,30 @@
 </div>
 @endsection
 
+@section('styles')
+<style>
+/* CSS untuk animasi popup */
+.modal.fade .modal-dialog {
+    transform: translateY(-50%);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.modal.fade.show .modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+}
+</style>
+@endsection
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
 <script>
-    function checkRole() {
-        var roleSelect = document.getElementById('role');
-        var selectedRole = roleSelect.value;
-
-        if (selectedRole === 'admin') {
-            var adminPopup = new bootstrap.Modal(document.getElementById('adminPopup'));
-            adminPopup.show();
-        }
+    function showAdminPopup() {
+        var adminPopup = new bootstrap.Modal(document.getElementById('adminPopup'));
+        adminPopup.show();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
