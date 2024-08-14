@@ -35,6 +35,11 @@
     <div class="card mt-4">
         <div class="card-header">
             Daftar Perangkat Daerah
+            <!-- Form pencarian -->
+            <form class="d-flex mt-2" method="GET" action="{{ route('admin.perangkat.daerah.form') }}">
+                <input class="form-control me-2" type="search" name="search" placeholder="Cari perangkat daerah" aria-label="Search" value="{{ request('search') }}">
+                <button class="btn btn-outline-success" type="submit">Cari</button>
+            </form>
         </div>
         <div class="card-body">
             @if($perangkatDaerah->isEmpty())
@@ -66,6 +71,7 @@
             </div>
             <form id="editForm" action="{{ route('perangkat.daerah.update') }}" method="POST">
                 @csrf
+                @method('PUT')
                 <input type="hidden" id="editId" name="id">
                 <div class="modal-body">
                     <div class="mb-3">
@@ -114,6 +120,5 @@
             }
         });
     }
-
 </script>
 @endsection

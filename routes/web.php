@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function () {
         // Tambah akun oleh admin
         Route::get('/admin/add-user', [AdminController::class, 'addUserForm'])->name('admin.addUserForm');
         Route::post('/admin/user/storeAdmin', [AdminController::class, 'storeAdmin'])->name('admin.user.storeAdmin');
-        Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.user.store');
         Route::post('/admin/add-user', [AdminController::class, 'store'])->name('admin.store');
 
         // View Crosscutting dan Progress RB Tematik
@@ -86,7 +85,7 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/perangkat-daerah', [FormController::class, 'perangkatDaerahForm'])->name('admin.perangkat.daerah.form');
     Route::post('/perangkat-daerah', [FormController::class, 'submitPerangkatDaerah'])->name('perangkat.daerah.submit');
     Route::get('/perangkat-daerah/edit/{id}', [FormController::class, 'editPerangkatDaerah'])->name('perangkat.daerah.edit');
-    Route::post('/perangkat-daerah/update', [FormController::class, 'updatePerangkatDaerah'])->name('perangkat.daerah.update');
+    Route::put('/perangkat-daerah/update', [FormController::class, 'updatePerangkatDaerah'])->name('perangkat.daerah.update');
     Route::delete('/perangkat-daerah/delete/{id}', [FormController::class, 'deletePerangkatDaerah'])->name('perangkat.daerah.delete');
 });
 

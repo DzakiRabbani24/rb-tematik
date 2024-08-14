@@ -65,6 +65,9 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="mb-3 text-center">
+                        <button type="button" class="btn btn-danger btn-lg" onclick="showAdminPopup()">Tambah Admin</button>
+                    </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success btn-lg">Tambah Akun</button>
                     </div>
@@ -111,6 +114,37 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Form Popup untuk Admin -->
+<div id="adminFormPopup" style="display:none;">
+    <form action="{{ route('admin.user.store') }}" method="POST">
+        @csrf
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="admin_username" name="username" placeholder="Username" required>
+            <label for="admin_username">Username</label>
+            @error('username')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-floating mb-3 position-relative">
+            <input type="password" class="form-control" id="admin_password" name="password" placeholder="Password" required>
+            <label for="admin_password">Password</label>
+            <div class="position-absolute top-50 end-0 translate-middle-y me-3">
+                <input type="checkbox" id="admin_showPassword" class="form-check-input d-none">
+                <label for="admin_showPassword" class="form-check-label">
+                    <i class="bi bi-eye" id="admin_passwordEye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                </label>
+            </div>
+            @error('password')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <input type="hidden" name="role" value="admin">
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg">Create Admin Account</button>
+        </div>
+    </form>
 </div>
 
 <div class="card mt-4">
@@ -184,7 +218,7 @@
                 confirmButtonText: 'Ok'
             });
         @endif
-
+        
         // Toggle password visibility
         const passwordEye = document.querySelector('#passwordEye');
         const adminPasswordEye = document.querySelector('#admin_passwordEye');
