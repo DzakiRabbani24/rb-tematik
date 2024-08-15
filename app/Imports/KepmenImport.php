@@ -15,6 +15,14 @@ class KepmenImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 {
     use Importable, SkipsFailures;
 
+    protected $year;
+
+    // Tambahkan constructor untuk menerima data tahun
+    public function __construct($year)
+    {
+        $this->year = $year;
+    }
+
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
@@ -32,6 +40,7 @@ class KepmenImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
             // Create and save a new Kepmen model
             Kepmen::create([
+                'tahun' => $this->year, // Gunakan tahun yang dipilih
                 'u' => $row['u'],
                 'bu' => $row['bu'],
                 'p' => $row['p'],

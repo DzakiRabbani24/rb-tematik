@@ -10,6 +10,7 @@ use App\Http\Controllers\KertasKerjaRenaksiController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\KepmenController;
 
 // Alias middleware secara manual
 Route::aliasMiddleware('role', RoleMiddleware::class);
@@ -62,13 +63,19 @@ Route::middleware('auth')->group(function () {
         Route::delete('/admin/user/{id}', [AdminController::class, 'delete'])->name('admin.user.delete');
 
         // Menampilkan tabel kepmen
-        Route::get('/kepmen', [AdminController::class, 'showKepmen'])->name('kepmen.index');
+        Route::get('/kepmen', [KepmenController::class, 'showKepmen'])->name('kepmen.index');
 
         // Urusan tabel kepmen
-        Route::get('/admin/kepmen', [AdminController::class, 'index'])->name('admin.kepmen');
+        Route::get('/admin/kepmen', [KepmenController::class, 'index'])->name('admin.kepmen');
+
+        //delete kepmen
+        Route::delete('/kepmen/delete', [KepmenController::class, 'delete'])->name('admin.delete.kepmen');
+
+        //aktivasi kepmen
+        Route::post('/admin/kepmen/activate', [KepmenController::class, 'activateKepmen'])->name('admin.activate.kepmen');
 
         // Import kepmen
-        Route::post('/import-kepmen', [AdminController::class, 'importKepmen'])->name('admin.import.kepmen');
+        Route::post('/import-kepmen', [KepmenController::class, 'importKepmen'])->name('admin.import.kepmen');
 
         // View Crosscutting dan Progress RB Tematik
         Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
