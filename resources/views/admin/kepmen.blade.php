@@ -7,36 +7,21 @@
         <h1>Data Kepmen</h1>
 
         <!-- Tabel Data -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Tahun</th>
-                    <th>Status</th>
-                    <th>U</th>
-                    <th>BU</th>
-                    <th>P</th>
-                    <th>K</th>
-                    <th>SK</th>
-                    <th>Nomenklatur Urusan Kabupaten Kota</th>
-                    <th>Kinerja</th>
-                    <th>Indikator</th>
-                    <th>Satuan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($kepmen as $item)
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ $item->tahun }}</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ $item->U }}</td>
-                        <td>{{ $item->BU }}</td>
-                        <td>{{ $item->P }}</td>
-                        <td>{{ $item->K }}</td>
-                        <td>{{ $item->SK }}</td>
-                        <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
-                        <td>{{ $item->kinerja }}</td>
-                        <td>{{ $item->indikator }}</td>
-                        <td>{{ $item->satuan }}</td>
+                        <th>Tahun</th>
+                        <th>Status</th>
+                        <th>U</th>
+                        <th>BU</th>
+                        <th>P</th>
+                        <th>K</th>
+                        <th>SK</th>
+                        <th>Nomenklatur Urusan Kabupaten Kota</th>
+                        <th>Kinerja</th>
+                        <th>Indikator</th>
+                        <th>Satuan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,6 +37,7 @@
                             <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
                             <td>{{ $item->kinerja }}</td>
                             <td>{{ $item->indikator }}</td>
+                            <td>{{ $item->satuan }}</td>
                         </tr>
                     @endforeach
                 </tbody>
