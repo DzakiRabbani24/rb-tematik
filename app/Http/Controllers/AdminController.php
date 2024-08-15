@@ -104,13 +104,17 @@ class AdminController extends Controller
     public function importKepmen(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:2048', // Validasi file
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
         ]);
 
-        // Impor data dari file Excel
-        Excel::import(new KepmenImport, $request->file('file'));
+        try {
+            Excel::import(new KepmenImport, $request->file('file'));
 
-        return redirect()->back()->with('success', 'Data Kepmen berhasil diimport!');
+            return redirect()->back()->with('success', 'File successfully imported.');
+        } catch (\Exception $e) {
+            \Log::error('Import Error:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Failed to import file.');
+        }
     }
 
     // Metode untuk view Crosscutting

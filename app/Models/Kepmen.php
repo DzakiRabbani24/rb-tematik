@@ -9,16 +9,17 @@ class Kepmen extends Model
     protected $table = 'kepmen';
 
     protected $fillable = [
-        'U',
-        'BU',
-        'P',
-        'K',
-        'SK',
+        'u',
+        'bu',
+        'p',
+        'k',
+        'sk',
         'nomenklatur_urusan_kabupaten_kota',
+        'kinerja',
         'indikator',
         'status',
         'tahun'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 }

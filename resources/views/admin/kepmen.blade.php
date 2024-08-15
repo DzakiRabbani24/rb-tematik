@@ -18,6 +18,7 @@
                     <th>K</th>
                     <th>SK</th>
                     <th>Nomenklatur Urusan Kabupaten Kota</th>
+                    <th>Kinerja</th>
                     <th>Indikator</th>
                 </tr>
             </thead>
@@ -32,21 +33,22 @@
                         <td>{{ $item->K }}</td>
                         <td>{{ $item->SK }}</td>
                         <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
+                        <td>{{ $item->kinerja }}</td>
                         <td>{{ $item->indikator }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
-        <div class="import-export-container">
-            <form action="{{ route('kepmen.import') }}" method="POST" enctype="multipart/form-data" class="import-form">
-                @csrf
-                <input type="file" name="file" accept=".xlsx, .xls, .csv" class="file-input">
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
-            
-        </div>
-
+        
+        <form action="{{ route('admin.import.kepmen') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="file">Upload File Kepmen:</label>
+                <input type="file" name="file" id="file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        
         <!-- Internal CSS -->
         <style>
             .import-export-container {
