@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Kepmen;
 use App\Models\User;
@@ -96,7 +97,7 @@ class AdminController extends Controller
     // Menampilkan Kepmen
     public function showKepmen()
     {
-        $kepmen = Kepmen::all();    
+        $kepmen = Kepmen::all();
         return view('admin.kepmen', compact('kepmen'));
     }
 
@@ -112,7 +113,7 @@ class AdminController extends Controller
 
             return redirect()->back()->with('success', 'File successfully imported.');
         } catch (\Exception $e) {
-            \Log::error('Import Error:', ['error' => $e->getMessage()]);
+            Log::error('Import Error:', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Failed to import file.');
         }
     }
@@ -236,5 +237,24 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function index(Request $request)
+    {
+        $query = $request->input('search');
+        $kepmen = Kepmen::query()
+            ->where('tahun', 'like', "%{$query}%")
+            ->orWhere('status', 'like', "%{$query}%")
+            ->orWhere('U', 'like', "%{$query}%")
+            ->orWhere('BU', 'like', "%{$query}%")
+            ->orWhere('P', 'like', "%{$query}%")
+            ->orWhere('K', 'like', "%{$query}%")
+            ->orWhere('SK', 'like', "%{$query}%")
+            ->orWhere('nomenklatur_urusan_kabupaten_kota', 'like', "%{$query}%")
+            ->orWhere('kinerja', 'like', "%{$query}%")
+            ->orWhere('indikator', 'like', "%{$query}%")
+            ->get();
+
+        return view('admin.kepmen', compact('kepmen'));
     }
 }

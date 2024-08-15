@@ -38,57 +38,87 @@
                         <td>{{ $item->indikator }}</td>
                         <td>{{ $item->satuan }}</td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        
-        <form action="{{ route('admin.import.kepmen') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label for="file">Upload File Kepmen:</label>
-                <input type="file" name="file" id="file" class="form-control" required>
+                </thead>
+                <tbody>
+                    @foreach($kepmen as $item)
+                        <tr>
+                            <td>{{ $item->tahun }}</td>
+                            <td>{{ $item->status }}</td>
+                            <td>{{ $item->U }}</td>
+                            <td>{{ $item->BU }}</td>
+                            <td>{{ $item->P }}</td>
+                            <td>{{ $item->K }}</td>
+                            <td>{{ $item->SK }}</td>
+                            <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
+                            <td>{{ $item->kinerja }}</td>
+                            <td>{{ $item->indikator }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Form Upload -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px;">
+                <h4 class="card-title mb-3">Upload File Kepmen</h4>
+                <form action="{{ route('admin.import.kepmen') }}" method="POST" enctype="multipart/form-data" class="import-form">
+                    @csrf
+                    <div class="form-group">
+                        <label for="file" class="form-label">Pilih File Kepmen:</label>
+                        <input type="file" name="file" id="file" class="form-control-file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </form>
-        
+        </div>
+
         <!-- Internal CSS -->
         <style>
-            .import-export-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-                margin-top: 40px;
-                padding: 20px;
-                max-width: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                background-color: #f9f9f9;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            .table-responsive {
+                overflow-x: auto;
             }
 
-            .import-form {
-                display: flex;
-                justify-content: center;
+            .table {
                 width: 100%;
+                min-width: 800px;
+                border-collapse: collapse;
             }
 
-            .file-input {
-                margin-right: 15px;
-                padding: 10px;
-                border: 1px solid #ced4da;
-                border-radius: 5px;
-                width: 100%;
+            .table th, .table td {
+                padding: 12px 15px;
+                text-align: center;
+            }
+
+            .table thead {
+                background-color: #343a40;
+                color: white;
+            }
+
+            .table tbody tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .card {
+                border-radius: 8px;
+                border: 1px solid #dee2e6;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
+
+            .form-label {
+                font-weight: 500;
             }
 
             .btn {
-                padding: 12px 25px;
+                padding: 10px;
                 border-radius: 5px;
                 cursor: pointer;
                 font-size: 16px;
                 transition: all 0.3s ease;
-                width: 100%;
             }
 
             .btn-primary {
