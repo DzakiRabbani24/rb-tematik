@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\PelaksanaController;
 use App\Http\Controllers\KertasKerjaRenaksiController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\RoleMiddleware;
 
-// Alias middleware secara manual (jika tidak ada kernel untuk mendaftarkannya)
+// Alias middleware secara manual
 Route::aliasMiddleware('role', RoleMiddleware::class);
 
 // Rute untuk tampilan landing page
@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/koordinator/rencanaaksi', [KoordinatorController::class, 'rencanaaksi'])->name('koordinator.rencanaaksi');
 
         // Update Profile
-        Route::put('/koordinator/update-profile', [AdminController::class, 'updateProfile'])->name('koordinator.updateProfile');
+        Route::put('/koordinator/update-profile', [KoordinatorController::class, 'updateProfile'])->name('koordinator.updateProfile');
     });
 
     // Rute khusus pelaksana
@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/rencana-aksi-rb-tematik', [PelaksanaController::class, 'rencanaAksi'])->name('pelaksana.rencanaAksi');
 
         // Update Profile
-        Route::put('/pelaksana/update-profile', [AdminController::class, 'updateProfile'])->name('pelaksana.updateProfile');
+        Route::put('/pelaksana/update-profile', [PelaksanaController::class, 'updateProfile'])->name('pelaksana.updateProfile');
     });
 
     // Rute untuk input perangkat daerah hanya bisa diakses oleh admin
