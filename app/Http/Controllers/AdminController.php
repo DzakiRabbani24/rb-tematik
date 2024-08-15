@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Kepmen;
 use App\Models\User;
@@ -14,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Imports\KepmenImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
-
 
 class AdminController extends Controller
 {

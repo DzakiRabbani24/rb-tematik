@@ -16,7 +16,9 @@ class CreateKepmenTable extends Migration
             $table->text('K');
             $table->text('SK');
             $table->text('nomenklatur_urusan_kabupaten_kota');
+            $table->text('kinerja');
             $table->text('indikator');
+            $table->text('satuan');
             $table->string('status')->default('nonaktif');
             $table->integer('tahun')->nullable();
             $table->timestamps();
