@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/kepmen', [AdminController::class, 'showKepmen'])->name('kepmen.index');
 
         // Import kepmen
-        Route::post('/kepmen/import', [AdminController::class, 'importKepmen'])->name('kepmen.import');
+        Route::post('/import-kepmen', [AdminController::class, 'importKepmen'])->name('admin.import.kepmen');
 
         // View Crosscutting dan Progress RB Tematik
         Route::get('/admin/crosscutting', [AdminController::class, 'viewCrosscutting'])->name('admin.crosscutting');
