@@ -26,14 +26,14 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rute yang hanya bisa diakses oleh pengguna yang terautentikasi
 Route::middleware('auth')->group(function () {
-    
+
     // Rute untuk profil pengguna
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 
     // Rute dashboard umum yang mengarahkan berdasarkan role
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        
+
         // Arahkan pengguna ke dashboard sesuai peran
         switch ($user->role) {
             case 'admin':
@@ -64,6 +64,9 @@ Route::middleware('auth')->group(function () {
         // Menampilkan tabel kepmen
         Route::get('/kepmen', [AdminController::class, 'showKepmen'])->name('kepmen.index');
 
+        // Urusan tabel kepmen
+        Route::get('/admin/kepmen', [AdminController::class, 'index'])->name('admin.kepmen');
+
         // Import kepmen
         Route::post('/import-kepmen', [AdminController::class, 'importKepmen'])->name('admin.import.kepmen');
 
@@ -82,7 +85,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/koordinator/dashboard', function () {
             return view('koordinator.dashboard');
         })->name('koordinator.dashboard');
-        
+
         // Rute khusus koordinator lainnya
         Route::get('/koordinator/evaluasi', [KoordinatorController::class, 'evaluasi'])->name('koordinator.evaluasi');
         Route::get('/koordinator/roadmap', [KoordinatorController::class, 'roadmap'])->name('koordinator.roadmap');
