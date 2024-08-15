@@ -20,6 +20,7 @@
                     <th>Nomenklatur Urusan Kabupaten Kota</th>
                     <th>Kinerja</th>
                     <th>Indikator</th>
+                    <th>Satuan</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,7 @@
                         <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
                         <td>{{ $item->kinerja }}</td>
                         <td>{{ $item->indikator }}</td>
+                        <td>{{ $item->satuan }}</td>
                     </tr>
                 @endforeach
             </tbody>

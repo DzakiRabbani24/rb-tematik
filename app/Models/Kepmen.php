@@ -17,8 +17,9 @@ class Kepmen extends Model
         'nomenklatur_urusan_kabupaten_kota',
         'kinerja',
         'indikator',
+        'satuan',
         'status',
-        'tahun'
+        'tahun',
     ];
 
     public $timestamps = true;
