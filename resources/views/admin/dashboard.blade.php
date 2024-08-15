@@ -3,21 +3,74 @@
 @section('title', 'Dashboard')
 
 <style>
-    .list-group-item2{
-        padding: 5px;
-        background-color: rgb(173, 193, 193);
-        color: black;
+    /* Styles for Sidebar */
+    .list-group-item {
+        padding: 10px;
+        background-color: #ffffff; /* White background for better contrast */
+        color: #333; /* Darker text color */
+        border: 1px solid #ddd; /* Light border for better separation */
     }
     .sub-menu-link {
-        display: block;
-        padding: 5px 10px;
-        background-color: rgb(172, 173, 173);
-        color: black;
+        padding: 10px;
+        background-color: #f8f9fa; /* Light grey background */
+        color: #333; /* Darker text color */
         text-decoration: none;
         border-bottom: 1px solid #ddd;
+        border-radius: 0.25rem;
     }
     .sub-menu-link:hover {
-        background-color: #7e7e7e;
+        background-color: #e2e6ea; /* Slightly darker grey */
+    }
+
+    /* Styles for Main Content */
+    .card {
+        border-radius: 0.5rem;
+        border: 1px solid #ddd; /* Light border for cards */
+    }
+    .card-header {
+        background-color: #ff4d4d; /* Bright red color */
+        color: #fff; /* White text color */
+    }
+    .card-body {
+        background-color: #fff; /* White background for card content */
+        color: #333; /* Darker text color */
+        padding: 1.25rem; /* Extra padding for card content */
+    }
+    .card-body p {
+        font-size: 1rem; /* Adjust font size for better readability */
+        line-height: 1.5; /* Increase line height for better spacing */
+    }
+    .card-body .card-text {
+        font-size: 1rem; /* Ensure font size is readable */
+        color: #333; /* Dark text color for better contrast */
+        padding: 0.5rem 0; /* Add padding around text */
+    }
+    .card-body a.btn-light {
+        color: #333;
+        background-color: #f8f9fa;
+        border-color: #ddd;
+        font-size: 0.875rem; /* Adjust button font size */
+        padding: 0.375rem 0.75rem; /* Adjust button padding */
+    }
+    .card-body a.btn-light:hover {
+        background-color: #e2e6ea;
+    }
+
+    /* Styles for Widgets */
+    .card.bg-red {
+        background-color: #ff4d4d; /* Bright red color */
+        color: #fff; /* White text color */
+    }
+    .card-header.bg-red {
+        background-color: #ff4d4d; /* Bright red color */
+        color: #fff; /* White text color */
+    }
+
+    /* Chart Styles */
+    .chart-container {
+        position: relative;
+        height: 400px;
+        width: 100%;
     }
 </style>
 
@@ -27,7 +80,7 @@
         <!-- Sidebar Menu -->
         <div class="col-md-3">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header">
                     <i class="fas fa-bars"></i> Menu
                 </div>
                 <div class="card-body p-0">
@@ -40,7 +93,7 @@
                             </a>
                             <div class="collapse" id="masterMenu">
                                 <div class="sub-menu-link">
-                                    <a href="{{ route ('admin.perangkat.daerah.form') }}" class="text-dark text-decoration-none">Perangkat Daerah</a>
+                                    <a href="{{ route('admin.perangkat.daerah.form') }}" class="text-dark text-decoration-none">Perangkat Daerah</a>
                                 </div>
                                 <div class="sub-menu-link">
                                     <a data-bs-toggle="collapse" href="#akunMenu" class="d-block text-dark text-decoration-none" role="button" aria-expanded="false" aria-controls="akunMenu">
@@ -83,15 +136,17 @@
         <!-- Main Content -->
         <div class="col-md-9">
             <div class="card mb-4">
-                <div class="card-header bg-success text-white">
+                <div class="card-header bg-red">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </div>
                 <div class="card-body">
                     <p>Welcome Admin!</p>
 
                     <!-- View Crosscutting -->
-                    <div class="card text-white bg-secondary mb-3">
-                        <div class="card-header"><i class="fas fa-database"></i> View Crosscutting</div>
+                    <div class="card mb-3 bg-red">
+                        <div class="card-header">
+                            <i class="fas fa-database"></i> View Crosscutting
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">Crosscutting Data</h5>
                             <p class="card-text">Display relevant crosscutting data here.</p>
@@ -100,8 +155,10 @@
                     </div>
 
                     <!-- Progress RB Tematik -->
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header"><i class="fas fa-spinner"></i> Progress RB Tematik</div>
+                    <div class="card mb-3 bg-red">
+                        <div class="card-header">
+                            <i class="fas fa-spinner"></i> Progress RB Tematik
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">RB Tematik Progress</h5>
                             <p class="card-text">Overview of RB Tematik progress.</p>
@@ -112,7 +169,7 @@
                     <!-- Example Widget -->
                     <div class="row mt-4">
                         <div class="col-md-4">
-                            <div class="card text-white bg-info mb-3">
+                            <div class="card bg-red text-white mb-3">
                                 <div class="card-header"><i class="fas fa-chart-pie"></i> Widget 1</div>
                                 <div class="card-body">
                                     <h5 class="card-title">Statistics</h5>
@@ -121,7 +178,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card text-white bg-warning mb-3">
+                            <div class="card bg-red text-white mb-3">
                                 <div class="card-header"><i class="fas fa-history"></i> Widget 2</div>
                                 <div class="card-body">
                                     <h5 class="card-title">Recent Activity</h5>
@@ -130,7 +187,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card text-white bg-danger mb-3">
+                            <div class="card bg-red text-white mb-3">
                                 <div class="card-header"><i class="fas fa-exclamation-circle"></i> Widget 3</div>
                                 <div class="card-body">
                                     <h5 class="card-title">Alerts</h5>
@@ -142,11 +199,13 @@
 
                     <!-- Example Chart -->
                     <div class="card mt-4">
-                        <div class="card-header bg-primary text-white">
-                            <i class="fas fa-chart-bar"></i> Sales Chart
+                        <div class="card-header bg-red text-white">
+                            <i class="fas fa-chart-bar"></i> Sales Overview
                         </div>
                         <div class="card-body">
-                            <canvas id="salesChart"></canvas>
+                            <div class="chart-container">
+                                <canvas id="salesChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,22 +214,19 @@
     </div>
 </div>
 
-@endsection
-
-@section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script>
-    var ctx = document.getElementById('salesChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
+    // Example Chart.js script
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: ['January', 'February', 'March', 'April', 'May'],
             datasets: [{
                 label: 'Sales',
-                data: [12, 19, 3, 5, 2, 3, 7],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             }]
         },
