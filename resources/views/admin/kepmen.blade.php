@@ -6,6 +6,18 @@
     <div class="container">
         <h1>Data Kepmen</h1>
 
+        <!-- Search Box -->
+        <div class="mb-4">
+            <form method="GET" action="{{ route('admin.kepmen') }}">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari..." value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Cari</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <!-- Tabel Data -->
         <div class="table-responsive">
             <table class="table">
