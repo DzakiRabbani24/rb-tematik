@@ -6,6 +6,19 @@
     <div class="container">
         <h1>Data Kepmen</h1>
 
+        <!-- Button Upload, Hapus, dan Aktivasi/Nonaktifkan -->
+        <div class="mb-4 d-flex justify-content-between">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+                Upload File Kepmen
+            </button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                Hapus Kepmen
+            </button>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#activateModal">
+                Aktivasi / Nonaktifkan Kepmen
+            </button>
+        </div>
+
         <!-- Search Box -->
         <div class="mb-4">
             <form method="GET" action="{{ route('admin.kepmen') }}">
@@ -56,18 +69,95 @@
             </table>
         </div>
 
-        <!-- Form Upload -->
-        <div class="d-flex justify-content-center mb-4">
-            <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px;">
-                <h4 class="card-title mb-3">Upload File Kepmen</h4>
-                <form action="{{ route('admin.import.kepmen') }}" method="POST" enctype="multipart/form-data" class="import-form">
-                    @csrf
-                    <div class="form-group">
-                        <label for="file" class="form-label">Pilih File Kepmen:</label>
-                        <input type="file" name="file" id="file" class="form-control-file" required>
+        <!-- Modal Upload -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload File Kepmen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
-                </form>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.import.kepmen') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file" class="form-label">Pilih File Kepmen:</label>
+                                <input type="file" name="file" id="file" class="form-control-file" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="year" class="form-label">Pilih Tahun:</label>
+                                <select name="year" id="year" class="form-control" required>
+                                    @for($i = date('Y'); $i >= 2000; $i--)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Delete -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Hapus File Kepmen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deleteForm" action="{{ route('admin.delete.kepmen') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div class="form-group">
+                                <label for="deleteYear" class="form-label">Pilih Tahun:</label>
+                                <select name="year" id="deleteYear" class="form-control" required>
+                                    @foreach($kepmen->unique('tahun') as $item)
+                                        <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger btn-block">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Aktivasi/Nonaktifkan -->
+        <div class="modal fade" id="activateModal" tabindex="-1" role="dialog" aria-labelledby="activateModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="activateModalLabel">Aktivasi / Nonaktifkan Kepmen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="activateForm" action="{{ route('admin.activate.kepmen') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="activateYear" class="form-label">Pilih Tahun Kepmen:</label>
+                                <select name="year" id="activateYear" class="form-control" required>
+                                    @foreach($kepmen->unique('tahun') as $item)
+                                        <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" name="action" value="activate" class="btn btn-success">Aktifkan</button>
+                                <button type="submit" name="action" value="deactivate" class="btn btn-warning">Nonaktifkan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -97,28 +187,6 @@
                 background-color: #f2f2f2;
             }
 
-            .card {
-                border-radius: 8px;
-                border: 1px solid #dee2e6;
-            }
-
-            .card-title {
-                font-size: 1.25rem;
-                font-weight: 500;
-            }
-
-            .form-label {
-                font-weight: 500;
-            }
-
-            .btn {
-                padding: 10px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                transition: all 0.3s ease;
-            }
-
             .btn-primary {
                 background-color: #007bff;
                 border: none;
@@ -127,22 +195,47 @@
 
             .btn-primary:hover {
                 background-color: #0056b3;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                border: none;
+                color: white;
+            }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+            .btn-secondary {
+                background-color: #6c757d;
+                border: none;
+                color: white;
+            }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+
+            .btn-success {
+                background-color: #28a745;
+                border: none;
+                color: white;
+            }
+
+            .btn-success:hover {
+                background-color: #218838;
+            }
+
+            .btn-warning {
+                background-color: #ffc107;
+                border: none;
+                color: black;
+            }
+
+            .btn-warning:hover {
+                background-color: #e0a800;
             }
         </style>
-
-        <!-- SweetAlert2 -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        @if(session('success'))
-            <script>
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: '{{ session('success') }}',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        @endif
     </div>
 @endsection
