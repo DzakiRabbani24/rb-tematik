@@ -4,66 +4,101 @@
 
 <style>
     /* Styles for Sidebar */
-    .list-group-item {
-        padding: 10px;
-        background-color: #ffffff; /* White background for better contrast */
-        color: #333; /* Darker text color */
-        border: 1px solid #ddd; /* Light border for better separation */
+    .sidebar .card {
+        border-radius: 0.5rem;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .sub-menu-link {
-        padding: 10px;
-        background-color: #f8f9fa; /* Light grey background */
-        color: #333; /* Darker text color */
-        text-decoration: none;
-        border-bottom: 1px solid #ddd;
+
+    .sidebar .list-group-item {
+        padding: 15px;
+        background-color: #f8f9fa;
+        color: #333;
+        border: none;
         border-radius: 0.25rem;
+        margin-bottom: 5px;
+        transition: background-color 0.2s ease-in-out;
     }
-    .sub-menu-link:hover {
-        background-color: #e2e6ea; /* Slightly darker grey */
+
+    .sidebar .list-group-item:hover {
+        background-color: #e9ecef;
+        cursor: pointer;
+    }
+
+    .sidebar .sub-menu-link {
+        padding: 10px 15px;
+        color: #495057;
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+    }
+
+    .sidebar .sub-menu-link:hover {
+        color: #212529;
     }
 
     /* Styles for Main Content */
-    .card {
+    .main-content .card {
         border-radius: 0.5rem;
-        border: 1px solid #ddd; /* Light border for cards */
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .card-header {
-        background-color: #ff4d4d; /* Bright red color */
-        color: #fff; /* White text color */
+
+    .main-content .card-header {
+        background-color: #dc3545;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 0.5rem 0.5rem 0 0;
     }
-    .card-body {
-        background-color: #fff; /* White background for card content */
-        color: #333; /* Darker text color */
-        padding: 1.25rem; /* Extra padding for card content */
+
+    .main-content .card-body {
+        padding: 1.5rem;
+        background-color: #fff;
     }
-    .card-body p {
-        font-size: 1rem; /* Adjust font size for better readability */
-        line-height: 1.5; /* Increase line height for better spacing */
+
+    .main-content .card-body .card-title {
+        font-weight: bold;
+        margin-bottom: 1rem;
     }
-    .card-body .card-text {
-        font-size: 1rem; /* Ensure font size is readable */
-        color: #333; /* Dark text color for better contrast */
-        padding: 0.5rem 0; /* Add padding around text */
+
+    .main-content .card-body .card-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #6c757d;
     }
-    .card-body a.btn-light {
-        color: #333;
-        background-color: #f8f9fa;
-        border-color: #ddd;
-        font-size: 0.875rem; /* Adjust button font size */
-        padding: 0.375rem 0.75rem; /* Adjust button padding */
+
+    .main-content .card-body .btn {
+        background-color: #ffc107;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 0.25rem;
+        transition: background-color 0.2s ease-in-out;
     }
-    .card-body a.btn-light:hover {
-        background-color: #e2e6ea;
+
+    .main-content .card-body .btn:hover {
+        background-color: #e0a800;
     }
 
     /* Styles for Widgets */
-    .card.bg-red {
-        background-color: #ff4d4d; /* Bright red color */
-        color: #fff; /* White text color */
+    .widget-card {
+        background-color: #343a40;
+        color: #fff;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease-in-out;
     }
-    .card-header.bg-red {
-        background-color: #ff4d4d; /* Bright red color */
-        color: #fff; /* White text color */
+
+    .widget-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .widget-card .card-header {
+        background-color: #343a40;
+        border-bottom: 1px solid #495057;
+    }
+
+    .widget-card .card-body {
+        color: #adb5bd;
     }
 
     /* Chart Styles */
@@ -71,23 +106,28 @@
         position: relative;
         height: 400px;
         width: 100%;
+        margin-top: 2rem;
+    }
+
+    .chart-container canvas {
+        max-height: 100%;
+        max-width: 100%;
     }
 </style>
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <!-- Sidebar Menu -->
-        <div class="col-md-3">
+        <div class="col-md-3 sidebar">
             <div class="card">
                 <div class="card-header">
                     <i class="fas fa-bars"></i> Menu
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
-                        <!-- Master Menu -->
-                        <div class="list-group-item p-0">
-                            <a data-bs-toggle="collapse" href="#masterMenu" class="d-block py-2 px-3 text-dark text-decoration-none" role="button" aria-expanded="false" aria-controls="masterMenu">
+                        <div class="list-group-item">
+                            <a data-bs-toggle="collapse" href="#masterMenu" class="d-block text-dark text-decoration-none" role="button" aria-expanded="false" aria-controls="masterMenu">
                                 <i class="fas fa-cogs"></i> Master
                                 <i class="fas fa-chevron-down float-end"></i>
                             </a>
@@ -111,7 +151,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Other Menus -->
                         <div class="list-group-item">
                             <a href="#" class="text-dark text-decoration-none"><i class="fas fa-road"></i> Roadmap RB Tematik</a>
@@ -134,42 +173,42 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-md-9">
+        <div class="col-md-9 main-content">
             <div class="card mb-4">
-                <div class="card-header bg-red">
+                <div class="card-header">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </div>
                 <div class="card-body">
                     <p>Welcome Admin!</p>
 
                     <!-- View Crosscutting -->
-                    <div class="card mb-3 bg-red">
+                    <div class="card mb-3 widget-card">
                         <div class="card-header">
                             <i class="fas fa-database"></i> View Crosscutting
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Crosscutting Data</h5>
                             <p class="card-text">Display relevant crosscutting data here.</p>
-                            <a href="{{ route('admin.crosscutting') }}" class="btn btn-light">View Details</a>
+                            <a href="{{ route('admin.crosscutting') }}" class="btn">View Details</a>
                         </div>
                     </div>
 
                     <!-- Progress RB Tematik -->
-                    <div class="card mb-3 bg-red">
+                    <div class="card mb-3 widget-card">
                         <div class="card-header">
                             <i class="fas fa-spinner"></i> Progress RB Tematik
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">RB Tematik Progress</h5>
                             <p class="card-text">Overview of RB Tematik progress.</p>
-                            <a href="{{ route('admin.rbtematik') }}" class="btn btn-light">View Details</a>
+                            <a href="{{ route('admin.rbtematik') }}" class="btn">View Details</a>
                         </div>
                     </div>
 
-                    <!-- Example Widget -->
+                    <!-- Example Widgets -->
                     <div class="row mt-4">
                         <div class="col-md-4">
-                            <div class="card bg-red text-white mb-3">
+                            <div class="card widget-card">
                                 <div class="card-header"><i class="fas fa-chart-pie"></i> Widget 1</div>
                                 <div class="card-body">
                                     <h5 class="card-title">Statistics</h5>
@@ -178,7 +217,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card bg-red text-white mb-3">
+                            <div class="card widget-card">
                                 <div class="card-header"><i class="fas fa-history"></i> Widget 2</div>
                                 <div class="card-body">
                                     <h5 class="card-title">Recent Activity</h5>
@@ -187,26 +226,19 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card bg-red text-white mb-3">
-                                <div class="card-header"><i class="fas fa-exclamation-circle"></i> Widget 3</div>
+                            <div class="card widget-card">
+                                <div class="card-header"><i class="fas fa-user-friends"></i> Widget 3</div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Alerts</h5>
+                                    <h5 class="card-title">User Statistics</h5>
                                     <p class="card-text">Some quick example text to build on the widget and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Example Chart -->
-                    <div class="card mt-4">
-                        <div class="card-header bg-red text-white">
-                            <i class="fas fa-chart-bar"></i> Sales Overview
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="salesChart"></canvas>
-                            </div>
-                        </div>
+                    <!-- Chart Section -->
+                    <div class="chart-container mt-5">
+                        <canvas id="rbTematikChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -214,19 +246,20 @@
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Example Chart.js script
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    new Chart(ctx, {
+    // Example Chart Data
+    const ctx = document.getElementById('rbTematikChart').getContext('2d');
+    const rbTematikChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May'],
+            labels: ['TW1', 'TW2', 'TW3', 'TW4'],
             datasets: [{
-                label: 'Sales',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                label: 'Realisasi Capaian',
+                data: [65, 59, 80, 81],
+                backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                borderColor: 'rgba(255, 193, 7, 1)',
                 borderWidth: 1
             }]
         },
