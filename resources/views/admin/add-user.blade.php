@@ -62,7 +62,7 @@
                         @enderror
                     </div>
                 </div>
-                
+
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success btn-lg">Tambah Akun</button>
                 </div>
@@ -70,59 +70,86 @@
         </div>
     </div>
 
-    <!-- Pindahkan tombol "Tambah Admin" ke bawah card -->
-    <div class="mt-3 text-center">
-        <!-- Tombol ini telah dihapus karena tidak diperlukan -->
-    </div>
-</div>
-
-<!-- Tabel User -->
-<div class="card mt-4">
-    <div class="card-header bg-secondary text-white text-center">
-        <h5 class="my-1">Daftar Akun</h5>
-    </div>
-
-    {{-- SearchBox --}}
-    <div class="mb-3 mt-3 d-flex justify-content-center">
-        <div class="input-group" style="width: 90%;">
-            <input type="text" id="searchInput" class="form-control rounded-start" placeholder="Cari Akun" style="box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);">
-            <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
-        </div>
-    </div>
-
     <!-- Tabel User -->
     <div class="card mt-4">
-        <div class="card-body">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Username</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Perangkat Daerah</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($users as $user)
+        <div class="card-header bg-secondary text-white text-center">
+            <h5 class="my-1">Daftar Akun</h5>
+        </div>
+
+        {{-- SearchBox --}}
+        <div class="mb-3 mt-3 d-flex justify-content-center">
+            <div class="input-group" style="width: 90%;">
+                <input type="text" id="searchInput" class="form-control rounded-start" placeholder="Cari Akun" style="box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);">
+                <button id="searchButton" class="btn btn-primary rounded-end ms-0" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">Cari</button>
+            </div>
+        </div>
+
+        <!-- Tabel User -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ ucfirst($user->role) }}</td>
-                            <td>{{ $user->perangkatDaerah->nama ?? 'Tidak ada' }}</td>
-                            <td>
-                                <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus akun ini?')">Delete</button>
-                                </form>
-                            </td>
+                            <th scope="col">Username</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Perangkat Daerah</th>
+                            <th scope="col">Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                            <tr>
+                                <td>{{ $user->username }}</td>
+                                <td>{{ ucfirst($user->role) }}</td>
+                                <td>{{ $user->perangkatDaerah->nama ?? 'Tidak ada' }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm me-2 edit-btn" data-user-id="{{ $user->id }}" data-perangkat-daerah="{{ $user->perangkat_daerah_id }}">Edit</button>
+                                    <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus akun ini?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Popup Edit -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Perangkat Daerah</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="editPerangkatDaerah" class="form-label">Perangkat Daerah</label>
+                        <select class="form-select" id="editPerangkatDaerah" name="perangkat_daerah_id">
+                            @foreach($perangkatDaerah as $daerah)
+                                <option value="{{ $daerah->id }}">{{ $daerah->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('perangkat_daerah_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('styles')
@@ -137,6 +164,17 @@
 .modal.fade.show .modal-dialog {
     transform: translateY(0);
     opacity: 1;
+}
+
+/* CSS untuk tombol edit berwarna kuning */
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
 }
 </style>
 @endsection
@@ -187,41 +225,33 @@
                 perangkatDaerahSelect.removeAttribute('required');
             } else {
                 perangkatDaerahSection.style.display = 'block';
-                perangkatDaerahSelect.setAttribute('required', 'required');
+                perangkatDaerahSelect.setAttribute('required', true);
             }
         }
 
-        // Initialize visibility based on the default or current selection
-        updatePerangkatDaerahVisibility();
+        roleSelect.addEventListener('change', updatePerangkatDaerahVisibility);
+        updatePerangkatDaerahVisibility(); // Initial check
 
-        roleSelect.addEventListener('change', function() {
-            console.log('Role changed:', roleSelect.value); // Debugging line
-            updatePerangkatDaerahVisibility();
-        });
+        // Handle Edit Button Click
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const userId = this.getAttribute('data-user-id');
+                const perangkatDaerahId = this.getAttribute('data-perangkat-daerah');
+                const editForm = document.querySelector('#editForm');
+                const modal = new bootstrap.Modal(document.querySelector('#editModal'));
 
-        // Pencarian di tabel dengan tombol "Cari"
-        const searchInput = document.querySelector('#searchInput');
-        const searchButton = document.querySelector('#searchButton');
-        const userTable = document.querySelector('tbody');
+                // Set form action URL
+                editForm.action = `/admin/users/${userId}`;
 
-        function searchTable() {
-            const filter = searchInput.value.toLowerCase();
-            const rows = userTable.querySelectorAll('tr');
+                // Set selected value for perangkat daerah
+                const perangkatDaerahSelect = document.querySelector('#editPerangkatDaerah');
+                perangkatDaerahSelect.value = perangkatDaerahId;
 
-            rows.forEach(row => {
-                const username = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                const role = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const perangkatDaerah = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-
-                if (username.includes(filter) || role.includes(filter) || perangkatDaerah.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                // Show the modal
+                modal.show();
             });
-        }
-
-        searchButton.addEventListener('click', searchTable);
+        });
     });
 </script>
 @endsection
