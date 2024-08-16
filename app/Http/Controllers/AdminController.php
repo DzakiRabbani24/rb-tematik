@@ -36,8 +36,8 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi dan simpan data user
-        $validatedData = $request->validate([
+        // Tentukan aturan validasi dasar
+        $rules = [
             'username' => 'required|string|max:255|unique:users',
             'password' => [
                 'required',
@@ -45,21 +45,34 @@ class AdminController extends Controller
                 'min:8',
                 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#.,]).+$/'
             ],
-            'role' => 'required|string|in:koordinator,pelaksana',
-            'perangkat_daerah_id' => 'required|exists:perangkat_daerah,id',
-        ], [
+            'role' => 'required|string|in:koordinator,pelaksana,admin', // Tambahkan admin sebagai opsi role
+        ];
+    
+        // Tambahkan validasi perangkat daerah jika role bukan admin
+        if ($request->role !== 'admin') {
+            $rules['perangkat_daerah_id'] = 'required|exists:perangkat_daerah,id';
+        }
+    
+        // Validasi data request
+        $validatedData = $request->validate($rules, [
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password harus memiliki panjang minimal :min karakter.',
             'password.regex' => 'Password harus mengandung huruf, angka, dan simbol.',
         ]);
-
+    
+        // Buat user baru
         $user = new User();
         $user->username = $validatedData['username'];
         $user->password = Hash::make($validatedData['password']);
         $user->role = $validatedData['role'];
-        $user->perangkat_daerah_id = $validatedData['perangkat_daerah_id'];
+    
+        // Jika role bukan admin, simpan perangkat daerah
+        if ($validatedData['role'] !== 'admin') {
+            $user->perangkat_daerah_id = $validatedData['perangkat_daerah_id'];
+        }
+    
         $user->save();
-
+    
         return redirect()->route('admin.addUserForm')->with('success', 'Akun berhasil ditambahkan!');
     }
 
