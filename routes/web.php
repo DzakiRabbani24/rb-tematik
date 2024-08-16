@@ -68,6 +68,9 @@ Route::middleware('auth')->group(function () {
         // Urusan tabel kepmen
         Route::get('/admin/kepmen', [KepmenController::class, 'index'])->name('admin.kepmen');
 
+        //Edt nama OPD
+        Route::put('/admin/users/{user}', [AdminController::class, 'editOPD'])->name('admin.user.update');
+
         //delete kepmen
         Route::delete('/kepmen/delete', [KepmenController::class, 'delete'])->name('admin.delete.kepmen');
 

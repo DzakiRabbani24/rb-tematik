@@ -219,4 +219,17 @@ class AdminController extends Controller
         }
     }
 
+    //edit OPD pada page add-user
+    public function editOPD(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'perangkat_daerah_id' => 'required|exists:perangkat_daerah,id',
+        ]);
+
+        $user->perangkat_daerah_id = $validated['perangkat_daerah_id'];
+        $user->save();
+
+        return redirect()->back()->with('success', 'Perangkat Daerah berhasil diperbarui.');
+    }
+
 }
