@@ -62,9 +62,13 @@
                     </div>
                     
                     <!-- Edit Password -->
-                    <div class="form-group mb-3">
-                        <label for="password" class="form-label">New Password:</label>
-                        <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+                    <div class="form-floating mb-3 position-relative">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        <label for="password">Password</label>
+                        <div class="position-absolute top-50 end-0 translate-middle-y me-3">
+                            <i class="bi bi-eye" id="passwordEye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                        </div>
+                        <p>Biarkan kosong jika tidak ingin mengubah password</p>
                     </div>
                     
                     <!-- Submit button -->
@@ -80,6 +84,18 @@
 <!-- SweetAlert script for success/error popup -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    // Toggle password visibility
+    const passwordEye = document.querySelector('#passwordEye');
+    const password = document.querySelector('#password');
+
+    passwordEye.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        passwordEye.classList.toggle('bi-eye');
+        passwordEye.classList.toggle('bi-eye-slash');
+    });
+
     @if(session('success'))
         Swal.fire({
             icon: 'success',
