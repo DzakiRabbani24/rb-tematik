@@ -34,6 +34,18 @@
                     @enderror
                 </div>
 
+                {{-- Textbox Confirm Password --}}
+                <div class="form-floating mb-3 position-relative">
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
+                    <label for="password_confirmation">Confirm Password</label>
+                    <div class="position-absolute top-50 end-0 translate-middle-y me-3">
+                        <i class="bi bi-eye" id="passwordConfirmEye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                    </div>
+                    @error('password_confirmation')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 {{-- Dropdown Role --}}
                 <div class="form-floating mb-3">
                     <select class="form-select" id="role" name="role" required>
@@ -206,12 +218,35 @@
         // Toggle password visibility
         const passwordEye = document.querySelector('#passwordEye');
         const password = document.querySelector('#password');
+        const passwordConfirmEye = document.querySelector('#passwordConfirmEye');
+        const passwordConfirmation = document.querySelector('#password_confirmation');
 
         passwordEye.addEventListener('click', function () {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
             passwordEye.classList.toggle('bi-eye');
             passwordEye.classList.toggle('bi-eye-slash');
+        });
+
+        passwordConfirmEye.addEventListener('click', function () {
+            const type = passwordConfirmation.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordConfirmation.setAttribute('type', type);
+            passwordConfirmEye.classList.toggle('bi-eye');
+            passwordConfirmEye.classList.toggle('bi-eye-slash');
+        });
+
+        // Validasi kesamaan password dan password_confirmation
+        const form = document.getElementById('addUserForm');
+        form.addEventListener('submit', function(event) {
+            if (password.value !== passwordConfirmation.value) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Password tidak sesuai!',
+                    confirmButtonText: 'Ok'
+                });
+            }
         });
 
         // Toggle dropdown perangkat daerah visibility and requirement based on role
@@ -255,3 +290,4 @@
     });
 </script>
 @endsection
+
