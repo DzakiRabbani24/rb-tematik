@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Kepmen;
+use App\Models\KepmenDb;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
@@ -17,10 +18,14 @@ class KepmenImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
     protected $year;
 
-    // Tambahkan constructor untuk menerima data tahun
     public function __construct($year)
     {
         $this->year = $year;
+
+        KepmenDb::firstOrCreate(
+            ['tahun' => $this->year],
+            ['status' => 'nonaktif']
+        );
     }
 
     public function collection(Collection $rows)
@@ -30,15 +35,13 @@ class KepmenImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             // Log::info('Headers:', array_keys($row->toArray()));
             // Log row data for debugging
             // Log::info('Importing row:', $row->toArray());
+            $status = KepmenDb::where('tahun', $this->year)->value('status');
             
             // Cek dan trim nilai SK
-            $sk = trim($row['sk']);
-            if (empty($sk)) {
-                // Log::error('Skipping row due to empty SK field: ' . $sk);
-                continue; // Skip this row
-            }
 
             // Create and save a new Kepmen model
+
+
             Kepmen::create([
                 'tahun' => $this->year, // Gunakan tahun yang dipilih
                 'u' => $row['u'],
@@ -49,7 +52,8 @@ class KepmenImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 'nomenklatur_urusan_kabupaten_kota' => $row['nomenklatur_urusan_kabupaten_kota'],
                 'kinerja' => $row['kinerja'],
                 'indikator' => $row['indikator'],
-                'satuan' => $row['satuan']
+                'satuan' => $row['satuan'],
+                'status' => $status // Set status dari tabel kepmen_db
             ]);
         }
     }
