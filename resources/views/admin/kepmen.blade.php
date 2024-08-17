@@ -146,8 +146,8 @@
                             <div class="form-group">
                                 <label for="activateYear" class="form-label">Pilih Tahun Kepmen:</label>
                                 <select name="year" id="activateYear" class="form-control" required>
-                                    @foreach($kepmen->unique('tahun') as $item)
-                                        <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
+                                    @foreach($years as $year)
+                                        <option value="{{ $year->tahun }}">{{ $year->tahun }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -160,6 +160,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Internal CSS -->
         <style>

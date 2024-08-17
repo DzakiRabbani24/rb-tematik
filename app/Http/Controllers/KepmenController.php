@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\KepmenImport;
 use Illuminate\Support\Facades\Log;
-use App\Models\Kepmen;
 use Illuminate\Http\Request;
+use App\Models\KepmenDb;
+use App\Models\Kepmen;
+use App\Imports\KepmenImport;
 
 class KepmenController extends Controller
 {
@@ -40,7 +41,10 @@ class KepmenController extends Controller
         // Hapus data Kepmen berdasarkan tahun
         Kepmen::where('tahun', $year)->delete();
 
-        return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen tahun ' . $year . ' berhasil dihapus.');
+        // Hapus data KepmenDb berdasarkan tahun
+        KepmenDb::where('tahun', $year)->delete();
+
+        return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen  tahun ' . $year . ' berhasil dihapus.');
     }
 
     // Menampilkan Kepmen
@@ -57,14 +61,20 @@ class KepmenController extends Controller
         $action = $request->input('action');
 
         if ($action == 'activate') {
-            Kepmen::where('tahun', $tahun)->update(['status' => 'aktif']);
-            $message = 'Semua Kepmen tahun ' . $tahun . ' berhasil diaktifkan!';
+            // Update status di kepmen_db
+            KepmenDb::where('tahun', $tahun)->update(['status' => 'aktif']);
         } elseif ($action == 'deactivate') {
-            Kepmen::where('tahun', $tahun)->update(['status' => 'nonaktif']);
-            $message = 'Semua Kepmen tahun ' . $tahun . ' berhasil dinonaktifkan!';
+            // Update status di kepmen_db
+            KepmenDb::where('tahun', $tahun)->update(['status' => 'nonaktif']);
         } else {
             return redirect()->route('admin.kepmen')->with('error', 'Aksi tidak valid.');
         }
+
+        // Update status di kepmen sesuai dengan status di kepmen_db
+        $status = KepmenDb::where('tahun', $tahun)->value('status');
+        Kepmen::where('tahun', $tahun)->update(['status' => $status]);
+
+        $message = 'Status Kepmen tahun ' . $tahun . ' berhasil diperbarui menjadi ' . $status . '!';
 
         return redirect()->route('admin.kepmen')->with('success', $message);
     }
@@ -73,21 +83,50 @@ class KepmenController extends Controller
     public function index(Request $request)
     {
         $query = $request->input('search');
-        $kepmen = Kepmen::query()
-            ->where('tahun', 'like', "%{$query}%")
-            ->orWhere('status', 'like', "%{$query}%")
-            ->orWhere('U', 'like', "%{$query}%")
-            ->orWhere('BU', 'like', "%{$query}%")
-            ->orWhere('P', 'like', "%{$query}%")
-            ->orWhere('K', 'like', "%{$query}%")
-            ->orWhere('SK', 'like', "%{$query}%")
-            ->orWhere('nomenklatur_urusan_kabupaten_kota', 'like', "%{$query}%")
-            ->orWhere('kinerja', 'like', "%{$query}%")
-            ->orWhere('indikator', 'like', "%{$query}%")
-            ->get();
-
-        return view('admin.kepmen', compact('kepmen'));
+    
+        // Ambil tahun unik dari tabel kepmen_db
+        $years = KepmenDb::select('tahun')->distinct()->get();
+    
+        // Query untuk pencarian
+        $kepmenQuery = Kepmen::query();
+    
+        if ($query) {
+            $kepmenQuery->where(function($q) use ($query) {
+                $q->where('tahun', 'like', "%{$query}%")
+                  ->orWhere('status', 'like', "%{$query}%")
+                  ->orWhere('U', 'like', "%{$query}%")
+                  ->orWhere('BU', 'like', "%{$query}%")
+                  ->orWhere('P', 'like', "%{$query}%")
+                  ->orWhere('K', 'like', "%{$query}%")
+                  ->orWhere('SK', 'like', "%{$query}%")
+                  ->orWhere('nomenklatur_urusan_kabupaten_kota', 'like', "%{$query}%")
+                  ->orWhere('kinerja', 'like', "%{$query}%")
+                  ->orWhere('indikator', 'like', "%{$query}%");
+            });
+        }
+    
+        $kepmen = $kepmenQuery->get();
+    
+        return view('admin.kepmen', compact('kepmen', 'years'));
     }
+    
+    // public function index(Request $request)
+    // {
+    //     $query = $request->input('search');
+    //     $years = KepmenDb::select('tahun')->distinct()->get();
+    //     $kepmen = Kepmen::query()
+    //         ->where('tahun', 'like', "%{$query}%")
+    //         ->orWhere('status', 'like', "%{$query}%")
+    //         ->orWhere('U', 'like', "%{$query}%")
+    //         ->orWhere('BU', 'like', "%{$query}%")
+    //         ->orWhere('P', 'like', "%{$query}%")
+    //         ->orWhere('K', 'like', "%{$query}%")
+    //         ->orWhere('SK', 'like', "%{$query}%")
+    //         ->orWhere('nomenklatur_urusan_kabupaten_kota', 'like', "%{$query}%")
+    //         ->orWhere('kinerja', 'like', "%{$query}%")
+    //         ->orWhere('indikator', 'like', "%{$query}%")
+    //         ->get();
 
-
+    //     return view('admin.kepmen', compact('kepmen'));
+    // }
 }
