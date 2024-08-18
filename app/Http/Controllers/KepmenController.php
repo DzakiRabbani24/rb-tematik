@@ -39,14 +39,22 @@ class KepmenController extends Controller
     {
         $year = $request->input('year');
 
-        // Hapus data Kepmen berdasarkan tahun
-        Kepmen::where('tahun', $year)->delete();
+        // Ambil tahun dari tabel KepmenDb berdasarkan input tahun
+        $tahun = KepmenDb::where('tahun', $year)->value('tahun');
 
-        // Hapus data KepmenDb berdasarkan tahun
-        KepmenDb::where('tahun', $year)->delete();
+        if ($tahun) {
+            // Hapus data Kepmen berdasarkan tahun
+            Kepmen::where('tahun', $tahun)->delete();
 
-        return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen tahun ' . $year . ' berhasil dihapus.');
+            // Hapus data KepmenDb berdasarkan tahun
+            KepmenDb::where('tahun', $tahun)->delete();
+
+            return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen tahun ' . $tahun . ' berhasil dihapus.');
+        } else {
+            return redirect()->route('admin.kepmen')->with('error', 'Data Kepmen dengan tahun ' . $year . ' tidak ditemukan.');
+        }
     }
+
 
     // Menampilkan Kepmen
     public function showKepmen()
@@ -74,7 +82,7 @@ class KepmenController extends Controller
 
         // Update status di kepmen sesuai dengan status di kepmen_db
         $status = KepmenDb::where('tahun', $tahun)->value('status');
-        Kepmen::where('tahun', $status)->update(['status' => $status]);
+        Kepmen::where('tahun', $tahun)->update(['status' => $status]);
 
         $message = 'Status Kepmen tahun ' . $tahun . ' berhasil diperbarui menjadi ' . $status . '!';
 
