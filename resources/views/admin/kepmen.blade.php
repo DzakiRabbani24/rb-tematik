@@ -118,7 +118,7 @@
                             <div class="form-group">
                                 <label for="deleteYear" class="form-label">Pilih Tahun:</label>
                                 <select name="year" id="deleteYear" class="form-control" required>
-                                    @foreach($kepmen->unique('tahun') as $item)
+                                    @foreach($years->unique('tahun') as $item)
                                         <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
                                     @endforeach
                                 </select>
