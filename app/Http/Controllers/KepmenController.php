@@ -37,31 +37,19 @@ class KepmenController extends Controller
     // Delete Kepmen
     public function delete(Request $request)
     {
-        $year = $request->input('year');
+        $years = $request->input('year');
 
-        // Ambil tahun dari tabel KepmenDb berdasarkan input tahun
-        $tahun = KepmenDb::where('tahun', $year)->value('tahun');
-
-        if ($tahun) {
-            // Hapus data Kepmen berdasarkan tahun
-            Kepmen::where('tahun', $tahun)->delete();
+        if ($years) {
+            // // Hapus data Kepmen berdasarkan tahun
+            Kepmen::where('tahun', $years)->delete();
 
             // Hapus data KepmenDb berdasarkan tahun
-            KepmenDb::where('tahun', $tahun)->delete();
+            KepmenDb::where('tahun', $years)->delete();
 
-            return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen tahun ' . $tahun . ' berhasil dihapus.');
+            return redirect()->route('admin.kepmen')->with('success', 'Data Kepmen tahun ' . $years . ' berhasil dihapus.');
         } else {
-            return redirect()->route('admin.kepmen')->with('error', 'Data Kepmen dengan tahun ' . $year . ' tidak ditemukan.');
+            return redirect()->route('admin.kepmen')->with('error', 'Data Kepmen dengan tahun ' . $years . ' tidak ditemukan.');
         }
-    }
-
-
-    // Menampilkan Kepmen
-    public function showKepmen()
-    {
-        $kepmen = Kepmen::all();
-        $years = KepmenDb::select('tahun')->distinct()->get(); // Ambil tahun unik dari tabel kepmen_db
-        return view('admin.kepmen', compact('kepmen', 'years'));
     }
 
     // Activate or Deactivate Kepmen
@@ -87,6 +75,14 @@ class KepmenController extends Controller
         $message = 'Status Kepmen tahun ' . $tahun . ' berhasil diperbarui menjadi ' . $status . '!';
 
         return redirect()->route('admin.kepmen')->with('success', $message);
+    }
+
+    // Menampilkan Kepmen
+    public function showKepmen()
+    {
+        $kepmen = Kepmen::all();
+        $years = KepmenDb::select('tahun')->distinct()->get(); // Ambil tahun unik dari tabel kepmen_db
+        return view('admin.kepmen', compact('kepmen', 'years'));
     }
 
     // Search Kepmen
