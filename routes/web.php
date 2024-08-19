@@ -64,18 +64,24 @@ Route::middleware('auth')->group(function () {
 
         // Menampilkan tabel kepmen
         Route::get('/kepmen', [KepmenController::class, 'showKepmen'])->name('kepmen.index');
+        Route::get('/admin/kepmen/active', [KepmenController::class, 'showActiveKepmen'])->name('admin.kepmen.active');
+
 
         // Urusan tabel kepmen
         Route::get('/admin/kepmen', [KepmenController::class, 'index'])->name('admin.kepmen');
 
-        //Edt nama OPD
+        // Edit nama OPD
         Route::put('/admin/users/{user}', [AdminController::class, 'editOPD'])->name('admin.user.update');
 
-        //delete kepmen
+        // Delete kepmen
         Route::delete('/kepmen/delete', [KepmenController::class, 'delete'])->name('admin.delete.kepmen');
 
-        //aktivasi kepmen
+        // Aktivasi kepmen
         Route::post('/admin/kepmen/activate', [KepmenController::class, 'activateKepmen'])->name('admin.activate.kepmen');
+
+        // Show Active Kepmen
+        Route::get('/admin/kepmen/active', [KepmenController::class, 'showActiveKepmen'])->name('admin.kepmen.active');
+
 
         // Import kepmen
         Route::post('/import-kepmen', [KepmenController::class, 'importKepmen'])->name('admin.import.kepmen');
