@@ -147,8 +147,8 @@
                                     </div>
                                 </div>
                                 <div class="sub-menu-link">
-                                    <a href="{{ route('kepmen.index') }}" class="text-dark text-decoration-none">KEPMEN</a>
-                                </div>
+                                    <a href="{{ route('admin.kepmen.active') }}" class="text-dark text-decoration-none">KEPMEN</a>
+                                </div>                                
                             </div>
                         </div>
                         <!-- Other Menus -->

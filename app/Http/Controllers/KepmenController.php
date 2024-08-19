@@ -115,4 +115,32 @@ class KepmenController extends Controller
     
         return view('admin.kepmen', compact('kepmen', 'years'));
     }
+
+    // Fungsi menampikan tabel kepmen di kepmen-active.blade.php
+    public function showActiveKepmen(Request $request)
+    {
+        // Mencari data dengan status aktif
+        $kepmen = Kepmen::where('status', 'aktif');
+    
+        // Menambahkan fitur pencarian jika ada
+        if ($request->has('search')) {
+            $kepmen->where(function($query) use ($request) {
+                $query->where('tahun', 'like', '%'.$request->search.'%')
+                    ->orWhere('U', 'like', '%'.$request->search.'%')
+                    ->orWhere('BU', 'like', '%'.$request->search.'%')
+                    ->orWhere('P', 'like', '%'.$request->search.'%')
+                    ->orWhere('K', 'like', '%'.$request->search.'%')
+                    ->orWhere('SK', 'like', '%'.$request->search.'%')
+                    ->orWhere('nomenklatur_urusan_kabupaten_kota', 'like', '%'.$request->search.'%')
+                    ->orWhere('kinerja', 'like', '%'.$request->search.'%')
+                    ->orWhere('indikator', 'like', '%'.$request->search.'%')
+                    ->orWhere('satuan', 'like', '%'.$request->search.'%');
+            });
+        }
+    
+        // Mengambil data dan mengirimkannya ke view
+        $kepmens = $kepmen->get();
+    
+        return view('admin.kepmen-active', compact('kepmens'));
+    }    
 }
