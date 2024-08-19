@@ -178,12 +178,6 @@
                         <option value="100">100 ROW</option>
                     </select>
                 </div>
-                <!-- Pagination -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <!-- Pagination items akan di-generate oleh script -->
-                    </ul>
-                </nav>
             </div>
             <div class="table-wrapper">
                 <table class="table table-hover table-striped table-bordered">
@@ -204,26 +198,32 @@
                     </thead>
                     <tbody>
                         @foreach($kepmen as $item)
-                            <tr>
-                                <td>{{ $item->tahun }}</td>
-                                <td>{{ $item->status }}</td>
-                                <td>{{ $item->U }}</td>
-                                <td>{{ $item->BU }}</td>
-                                <td>{{ $item->P }}</td>
-                                <td>{{ $item->K }}</td>
-                                <td>{{ $item->SK }}</td>
-                                <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
-                                <td>{{ $item->kinerja }}</td>
-                                <td>{{ $item->indikator }}</td>
-                                <td>{{ $item->satuan }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ $item->tahun }}</td>
+                            <td>{{ $item->status }}</td>
+                            <td>{{ $item->U }}</td>
+                            <td>{{ $item->BU }}</td>
+                            <td>{{ $item->P }}</td>
+                            <td>{{ $item->K }}</td>
+                            <td>{{ $item->SK }}</td>
+                            <td>{{ $item->nomenklatur_urusan_kabupaten_kota }}</td>
+                            <td>{{ $item->kinerja }}</td>
+                            <td>{{ $item->indikator }}</td>
+                            <td>{{ $item->satuan }}</td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
         
-                  
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- Pagination items akan di-generate oleh script -->
+            </ul>
+        </nav>
+        
 
         <!-- Modal Upload -->
         <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -324,7 +324,8 @@ function updateRowsPerPage() {
     const table = document.querySelector('.table tbody');
     const rows = Array.from(table.querySelectorAll('tr'));
     const pagination = document.querySelector('.pagination');
-    const pages = Math.ceil(rows.length / rowsPerPage);
+    const totalRows = rows.length;
+    const pages = Math.ceil(totalRows / rowsPerPage);
 
     // Reset pagination
     pagination.innerHTML = '';
@@ -344,6 +345,20 @@ function updateRowsPerPage() {
         pageItem.className = 'page-item' + (i === 1 ? ' active' : '');
         pageItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i}, ${rowsPerPage})">${i}</a>`;
         pagination.appendChild(pageItem);
+
+        if (i === 5 && pages > 5) {
+            const dotsItem = document.createElement('li');
+            dotsItem.className = 'page-item disabled';
+            dotsItem.innerHTML = `<a class="page-link" href="#">...</a>`;
+            pagination.appendChild(dotsItem);
+
+            const lastPageItem = document.createElement('li');
+            lastPageItem.className = 'page-item';
+            lastPageItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${pages}, ${rowsPerPage})">${pages}</a>`;
+            pagination.appendChild(lastPageItem);
+
+            break;
+        }
     }
 
     // Buat tombol "Next"
@@ -363,6 +378,8 @@ function updateRowsPerPage() {
 function changePage(page, rowsPerPage) {
     const table = document.querySelector('.table tbody');
     const rows = Array.from(table.querySelectorAll('tr'));
+    const totalRows = rows.length;
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
     const start = (page - 1) * rowsPerPage;
     const end = start + parseInt(rowsPerPage);
 
@@ -371,13 +388,21 @@ function changePage(page, rowsPerPage) {
     });
 
     // Perbarui status halaman aktif
-    document.querySelectorAll('.pagination .page-item').forEach(item => item.classList.remove('active'));
-    document.querySelectorAll('.pagination .page-item')[page].classList.add('active');
+    const paginationItems = document.querySelectorAll('.pagination .page-item');
+    paginationItems.forEach(item => item.classList.remove('active'));
+
+    const pageIndex = (page <= 5 || totalPages <= 5) ? page : (page - 4 > 0 ? 6 : page);
+    paginationItems[pageIndex].classList.add('active');
+
+    // Perbarui tombol "Previous" dan "Next"
+    paginationItems[0].classList.toggle('disabled', page === 1);
+    paginationItems[paginationItems.length - 1].classList.toggle('disabled', page === totalPages);
 }
 
 // Inisialisasi tampilan pertama
 document.addEventListener('DOMContentLoaded', function() {
     updateRowsPerPage(); // Atur jumlah baris per halaman saat halaman pertama kali dimuat
 });
+
 </script>
 @endsection
