@@ -181,19 +181,7 @@
                 <!-- Pagination -->
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
+                        <!-- Pagination items akan di-generate oleh script -->
                     </ul>
                 </nav>
             </div>
@@ -233,9 +221,8 @@
                     </tbody>
                 </table>
             </div>
-        
-            <!-- Dropdown untuk mengatur jumlah baris per halaman dan Pagination -->
         </div>
+        
                   
 
         <!-- Modal Upload -->
@@ -330,5 +317,67 @@
             </div>
         </div>
 
-<!-- Internal CSS -->
+<script>
+// Script untuk mengatur jumlah baris yang ditampilkan per halaman
+function updateRowsPerPage() {
+    const rowsPerPage = document.getElementById('rowsPerPage').value;
+    const table = document.querySelector('.table tbody');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const pagination = document.querySelector('.pagination');
+    const pages = Math.ceil(rows.length / rowsPerPage);
+
+    // Reset pagination
+    pagination.innerHTML = '';
+
+    // Buat tombol "Previous"
+    const prevPageItem = document.createElement('li');
+    prevPageItem.className = 'page-item';
+    prevPageItem.innerHTML = `
+        <a class="page-link" href="#" aria-label="Previous" onclick="changePage(${1}, ${rowsPerPage})">
+            <span aria-hidden="true">&laquo;</span>
+        </a>`;
+    pagination.appendChild(prevPageItem);
+
+    // Buat tombol pagination berdasarkan jumlah halaman
+    for (let i = 1; i <= pages; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.className = 'page-item' + (i === 1 ? ' active' : '');
+        pageItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i}, ${rowsPerPage})">${i}</a>`;
+        pagination.appendChild(pageItem);
+    }
+
+    // Buat tombol "Next"
+    const nextPageItem = document.createElement('li');
+    nextPageItem.className = 'page-item';
+    nextPageItem.innerHTML = `
+        <a class="page-link" href="#" aria-label="Next" onclick="changePage(${pages}, ${rowsPerPage})">
+            <span aria-hidden="true">&raquo;</span>
+        </a>`;
+    pagination.appendChild(nextPageItem);
+
+    // Tampilkan halaman pertama
+    changePage(1, rowsPerPage);
+}
+
+// Script untuk mengubah halaman tabel
+function changePage(page, rowsPerPage) {
+    const table = document.querySelector('.table tbody');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const start = (page - 1) * rowsPerPage;
+    const end = start + parseInt(rowsPerPage);
+
+    rows.forEach((row, index) => {
+        row.style.display = (index >= start && index < end) ? '' : 'none';
+    });
+
+    // Perbarui status halaman aktif
+    document.querySelectorAll('.pagination .page-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.pagination .page-item')[page].classList.add('active');
+}
+
+// Inisialisasi tampilan pertama
+document.addEventListener('DOMContentLoaded', function() {
+    updateRowsPerPage(); // Atur jumlah baris per halaman saat halaman pertama kali dimuat
+});
+</script>
 @endsection
