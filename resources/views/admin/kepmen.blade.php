@@ -143,7 +143,7 @@
         <h1>Data Kepmen</h1>
 
         <!-- Button Upload, Hapus, dan Aktivasi/Nonaktifkan -->
-        <div class="mb-4 d-flex justify-content-between">
+        <div class="mb-4 d-flex justify-content-start gap-2">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
                 Upload File Kepmen
             </button>
@@ -154,6 +154,7 @@
                 Aktivasi / Nonaktifkan Kepmen
             </button>
         </div>
+
 
         <!-- Search Box -->
         <div class="mb-4">
