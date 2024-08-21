@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RB Tematik</title>
-    <!-- Tambahkan Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Tambahkan Font Awesome untuk ikon -->
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
         body {
-            padding-top: 70px; /* Menambahkan padding untuk menghindari overlap konten dengan navbar */
+            padding-top: 70px; /* Padding to avoid content overlap with navbar */
         }
 
         .navbar {
@@ -39,23 +39,59 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .nav-link.active {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
         .navbar-nav.ml-auto {
             margin-left: auto;
         }
 
-        .btn-link {
-            color: #ffffff;
-            font-weight: bold;
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
         }
 
-        .btn-link:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.2);
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-menu a,
+        .profile-dropdown-menu button {
+            color: #333;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+        }
+
+        .profile-dropdown-menu a i,
+        .profile-dropdown-menu button i {
+            margin-right: 10px;
+        }
+
+        .profile-dropdown-menu a:hover,
+        .profile-dropdown-menu button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-dropdown:hover .profile-dropdown-menu {
+            display: block;
+        }
+
+        .profile-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -75,31 +111,36 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile') }}">
-                            <i class="fas fa-user"></i> Profile
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="fas fa-cog"></i> Settings
                         </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </button>
-                        </form>
+                    <!-- User Profile with Dummy Image and Username -->
+                    <li class="nav-item profile-dropdown">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image">
+                            <span class="ml-2">{{ Auth::user()->username }}</span>
+                        </a>
+                        <div class="profile-dropdown-menu">
+                            <a href="{{ route('profile') }}">
+                                <i class="fas fa-user"></i> Profile
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit">
+                                    <i class="fas fa-sign-out-alt"></i> Log Out
+                                </button>
+                            </form>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Tambahkan Bootstrap JS dan jQuery -->
+    <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
