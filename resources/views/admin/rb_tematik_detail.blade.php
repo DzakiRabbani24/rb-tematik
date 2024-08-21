@@ -58,7 +58,7 @@
                                 <td>{{ $data->rencana_aksi }}</td>
                                 <td>
                                     <div class="progress" style="height: 30px;">
-                                        <div class="progress-bar" role="progressbar" style="width: {{ $percentage }}%; background: linear-gradient(to right, #00bfff, #1e90ff);" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background: linear-gradient(to right, #00bfff, #1e90ff);">
                                             {{ number_format($percentage, 2) }}%
                                         </div>
                                     </div>
@@ -119,6 +119,22 @@
 
         // Load initial data
         updateProgress();
+
+        // IntersectionObserver for animating the progress bars when they enter the viewport
+        const progressBars = document.querySelectorAll('.progress-bar');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transition = 'width 2s ease-in-out';
+                    entry.target.style.width = entry.target.getAttribute('aria-valuenow') + '%';
+                }
+            });
+        }, {
+            threshold: 0.5 // Adjust as needed
+        });
+
+        progressBars.forEach(bar => observer.observe(bar));
     });
 </script>
 @endsection
